@@ -21,8 +21,27 @@
                         <el-tab-pane label="车辆资料">
                             <car-info></car-info>
                         </el-tab-pane>
-                        <el-tab-pane label="定价结论">定价结论</el-tab-pane>
-                        <el-tab-pane label="流程轨迹">流程轨迹</el-tab-pane>
+                        <el-tab-pane label="定价结论">
+                            <price-conclusion></price-conclusion>
+                        </el-tab-pane>
+                        <el-tab-pane label="流程轨迹">
+                            <work-log></work-log>
+                        </el-tab-pane>
+                        <el-tab-pane label="客户资料">
+                            <custom-info></custom-info>
+                        </el-tab-pane>
+                        <el-tab-pane label="历史匹配">
+                            <history-match></history-match>
+                        </el-tab-pane>
+                        <el-tab-pane label="审核意见">
+                            <check-opinion></check-opinion>
+                        </el-tab-pane>
+                        <el-tab-pane label="客户复议">
+                            <custom-reconsider></custom-reconsider>
+                        </el-tab-pane>
+                        <el-tab-pane label="审核意见-终审">
+                            <final-check></final-check>
+                        </el-tab-pane>
                     </el-tabs>
                 </div>
             </el-col>
@@ -31,9 +50,23 @@
 </template>
 <script>
 import CarInfo from './Tabs/CarInfo'
+import PriceConclusion from './Tabs/PriceConclusion'
+import WorkLog from './Tabs/WorkLog'
+import CustomInfo from './Tabs/CustomInfo'
+import HistoryMatch from './Tabs/HistoryMatch'
+import CheckOpinion from './Tabs/CheckOpinion'
+import CustomReconsider from './Tabs/CustomReconsider'
+import FinalCheck from './Tabs/FinalCheck'
 export default {
   components: {
     CarInfo,
+    PriceConclusion,
+    WorkLog,
+    CustomInfo,
+    HistoryMatch,
+    CheckOpinion,
+    CustomReconsider,
+    FinalCheck
   },
   data() {
     return {
