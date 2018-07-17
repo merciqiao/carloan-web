@@ -42,6 +42,10 @@
                         <el-tab-pane label="审核意见-终审">
                             <final-check></final-check>
                         </el-tab-pane>
+                         <el-tab-pane label="电核网核">
+                            <survey-contacts></survey-contacts>
+                        </el-tab-pane>
+                       
                     </el-tabs>
                 </div>
             </el-col>
@@ -57,6 +61,8 @@ import HistoryMatch from './Tabs/HistoryMatch'
 import CheckOpinion from './Tabs/CheckOpinion'
 import CustomReconsider from './Tabs/CustomReconsider'
 import FinalCheck from './Tabs/FinalCheck'
+import SurveyContacts from './Tabs/SurveyContacts'
+
 export default {
   components: {
     CarInfo,
@@ -66,7 +72,9 @@ export default {
     HistoryMatch,
     CheckOpinion,
     CustomReconsider,
-    FinalCheck
+    FinalCheck,
+    SurveyContacts
+
   },
   data() {
     return {
