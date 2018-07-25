@@ -1,5 +1,7 @@
 <template> 
-<div>
+<div id="dhwh">
+    <!-- <div id="editor"></div>  -->
+      
       <el-button size="mini"  @click="handleAdd">新增</el-button>        
         <el-table :data="resultData" size="mini"  highlight-current-row border  style="width: 100%;height:500px;padding-bottom: 0px;text-align:center;" class="el-tb-edit"  ref="demoTable"  v-loading="listLoading">
             <el-table-column type="index" width="50">
@@ -84,17 +86,18 @@
 		</el-dialog>
 
  <!--电核网核界面-->
-		<el-dialog title="电核网核" :visible.sync="phoneFormVisible" :close-on-click-modal="false"  >
-			<el-form  :model="contactsInfoForm" label-width="80px"   ref="contactsInfoForm">      
+		<el-dialog title="电核网核" @open="openDialog" :visible.sync="phoneFormVisible" :close-on-click-modal="false" width="58%" top="57px"  :modal="false"  customClass="dh_dialog">
+    
+			<el-form  :model="contactsInfoForm" label-width="80px"   ref="contactsInfoForm">  
+<el-row :gutter="0">
+<el-col :span="14">
 				<el-tabs v-model="phonFormFirst"  tab-position="left" @tab-click="handleClick"  > 
             <el-tab-pane  v-for="item in phoneForm"   :key="item.index"  :label="item.userName+' '+item.relationship+' '+item.userTelephone"  :name="item.id+''">                         
               <el-row :gutter="20" type="flex" class="row_bg"> 
-                          <el-col :span="12"><div class="grid_content bg_purple_light">网核</div></el-col>
                           <el-col :span="12">
-                            <div class="grid_content bg_purple_light">
-                                  <el-input  type="textarea"  :rows="2"  placeholder="请输入内容"  v-model="csContent.content" ></el-input>
-                            </div>
-                          </el-col>
+                            <div class="grid_content bg_purple_light">网核</div>                          
+                            <div  style="border:1px solid #E4E8ED;width:320px;height:270px"></div>
+                           </el-col>                         
                </el-row>           
                <el-row :gutter="20" type="flex" class="row_bg">
                       <el-col :span="12">
@@ -102,30 +105,47 @@
                           <span class="span">姓名：</span>{{contactsInfo.userName}}&nbsp;&nbsp;
                           <span class="span">关系:</span>{{contactsInfo.relationship}}&nbsp;&nbsp;
                           <span class="span">电话：</span>{{contactsInfo.userTelephone}} 
-                        <el-input  type="textarea"  :rows="2"  placeholder="请输入内容"  v-model="contactsInfoRemark.otherRemark" ></el-input>
+                        <el-input  type="textarea"  :rows="12"  placeholder="请输入内容"  v-model="contactsInfoRemark.otherRemark" ></el-input>
                         </div>
-                      </el-col>
-                      <el-col :span="12">
-                        <div class="grid_content bg_purple_light">
-                           <el-input  type="textarea"  :rows="2"  placeholder="请输入内容"  v-model="zsContent.content" ></el-input>
-                        </div>
-                      </el-col>
+                      </el-col>                    
               </el-row>
-            </el-tab-pane>
-         </el-tabs>
+            </el-tab-pane>          
+         </el-tabs>   
+</el-col>
+<el-col :span="10">
+  <el-row :gutter="0">
+<el-col>
+    <div class="grid_content bg_purple_light">
+       初审备注</div><div id="cseditor" style="border:1px solid #E4E8ED;width:320px"></div>  
+ </el-col> 
+ </el-row>
+  <el-row :gutter="0">
+<el-col >
+    <div class="grid_content bg_purple_light">
+       终审备注</div> <div id="zseditor" style="border:1px solid #E4E8ED;width:320px"></div>  
+ </el-col> 
+ </el-row>
+</el-col>
+</el-row>
 			</el-form>
       <div slot="footer" class="dialog-footer">
 				<el-button @click="phoneFormVisible = false">取消</el-button>
 				<el-button type="primary" @click="savePhoneInfoSubmit" :loading="phoneLoading">保存</el-button>
 			</div>
 		</el-dialog>
-
     </div> 
  </template>
    <script>
+  import '../../../../static/ueditor/ueditor.config.js'
+  import '../../../../static/ueditor/ueditor.all.js'
+  import '../../../../static/ueditor/lang/zh-cn/zh-cn.js'
+  import '../../../../static/ueditor/ueditor.parse.min.js'
+
 export default {
   data() {
     return {
+      cseditor: null,
+      zseditor: null,
       filters: {
         orderNum: 'GZPHYB1542017061500003'
       },
@@ -192,7 +212,7 @@ export default {
       phoneLoading: false,
       //电核网核界面formModel,保存提交提示用到，其它无用   
       contactsInfoForm:{},
-      //tabs默认选中
+      //tabs默认选中，赋值为联系人主键ID
       phonFormFirst: '',
       //循环左侧联系人信息form
       phoneForm:[],
@@ -211,7 +231,7 @@ export default {
      
     };
   },
-  methods: {
+  methods: {   
     //获取联系人列表
     getResult: function() {
       var _this = this;
@@ -335,16 +355,17 @@ export default {
     handlePhone: function(index, row) {
       this.phoneFormVisible = true;
       this.phoneForm = this.resultData;
-      //默认选中电核网核tabs第一个
+      //联系人主键ID,根据联系人主键I默认选中电核网核tabs
       this.phonFormFirst = row.id + '';
       //根据电核网核联系人ID，查询电核网核联系人详细信息
       this.getContactsInfo(row.id);
       //根据电核网核联系人ID，查询电核网核联系人电核备注
       this.getContactsInfoRemark(row.id);
        //根据订单编号及备注类别查询初审备注
-      this.getCSContent(this.filters.orderNum);
+     // this.getCSContent(this.filters.orderNum);
       //根据订单编号及备注类别查询终审备注
-      this.getZSContent(this.filters.orderNum);
+     // this.getZSContent(this.filters.orderNum);     
+   
     },
     //显示电核网核界面
     handleClick(tab, event) {     
@@ -353,9 +374,12 @@ export default {
        //根据电核网核联系人ID，查询电核网核联系人电核备注
       this.getContactsInfoRemark(tab.name);
       //根据订单编号及备注类别查询初审备注
-      this.getCSContent(this.filters.orderNum);
+      //this.getCSContent(this.filters.orderNum);
       //根据订单编号及备注类别查询终审备注
-      this.getZSContent(this.filters.orderNum);
+      //this.getZSContent(this.filters.orderNum);  
+      
+     
+  
     },
     //根据电核网核联系人ID，查询电核网核联系人详细信息
     getContactsInfo: function(contactsInfo_id) {
@@ -368,11 +392,12 @@ export default {
         data: param
       }).then(
         function(resultData) {
-          _this.contactsInfo = resultData.data.data;         
+          _this.contactsInfo = resultData.data.data;    
+          console.log(resultData);     
         },
         function(resultData) {
           _this.resultData.message = "Local Reeuest Error!";
-          console.log(resultData);
+          
         }
       );
     },
@@ -407,7 +432,8 @@ export default {
         data: param
       }).then(
         function(resultData) {
-          _this.csContent = resultData.data.data; 
+          _this.csContent = resultData.data.data;          
+          console.log(_this.csContent);
         },
         function(resultData) {
           _this.resultData.message = "Local Reeuest Error!";
@@ -437,14 +463,21 @@ export default {
     },
 
      //电核网核保存按钮
-    savePhoneInfoSubmit: function() {
+    savePhoneInfoSubmit: function() {    
       this.$refs.contactsInfoForm.validate(valid => {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
+            //初审富文本编辑器内容
+              let cseditor =this.cseditor.getContent();
+           //终审富文本编辑器内容
+              let zseditor =this.zseditor.getContent();
             this.phoneLoading = true;
-           let param = new URLSearchParams();
+           let param = new URLSearchParams();          
+             param.append("order_number", this.filters.orderNum);
              param.append("otherRemark", this.contactsInfoRemark.otherRemark);
-             alert(param);
+             param.append("csContent", cseditor);
+             param.append("zsContent",zseditor);  
+             param.append("contactsInfo_id",this.phonFormFirst);                
             this.$ajax({
               method: "post",
               url: "/api/carloansurveyinfo-api/saveCarLoanSurveyInfo",
@@ -462,12 +495,36 @@ export default {
           });
         }
       });
-    }
-
-
+    } ,
+    //Dialog 对话框回调才能渲染出富文本编辑器
+    openDialog:function(){
+        this.$nextTick(function () { 
+            this.cseditor = UE.getEditor('cseditor');          
+            this.zseditor = UE.getEditor('zseditor');  
+            var $this=this;        
+            this.cseditor.ready(function() {               
+               $this.$nextTick(function(){ 
+                UE.getEditor('cseditor').setContent($this.csContent.content);
+              });
+            });
+            this.zseditor.ready(function(){              
+              $this.$nextTick(function(){
+                UE.getEditor('zseditor').setContent($this.zsContent.content);
+              });
+            });
+         })
+      
+       }
   },
   mounted() {
+    //获取联系人列表
     this.getResult();
+     //根据订单编号及备注类别查询初审备注，初始赋值方便编辑器赋值，否则富文本编辑器初次无值
+    this.getCSContent(this.filters.orderNum);
+    //根据订单编号及备注类别查询终审备注，初始赋值方便编辑器赋值，否则富文本编辑器初次无值
+    this.getZSContent(this.filters.orderNum);    
+
+    
   }
 };
 </script>
@@ -514,14 +571,14 @@ body {
   display: none;
 }
 .pri_btn_container {
-  width: 170px;
+  width: 180px;
   float: right;
   margin-top: 30px;
 }
 .grid_content {
   border-radius: 4px;
   min-height: 36px;
-  width: 288px;
+  width: 323px;
 }
 .bg_purple_light {
   background: #e5e9f2;
@@ -532,5 +589,8 @@ body {
 .span{
     color:rgb(255, 0, 0);
      font-weight:bold;
+}
+.dh_dialog{   
+  margin-right: 4px; 
 }
 </style>
