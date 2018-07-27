@@ -1,7 +1,5 @@
 <template> 
 <div id="dhwh">
-    <!-- <div id="editor"></div>  -->
-      
       <el-button size="mini"  @click="handleAdd">新增</el-button>        
         <el-table :data="resultData" size="mini"  highlight-current-row border  style="width: 100%;height:500px;padding-bottom: 0px;text-align:center;" class="el-tb-edit"  ref="demoTable"  v-loading="listLoading">
             <el-table-column type="index" width="50">
@@ -86,22 +84,38 @@
 		</el-dialog>
 
  <!--电核网核界面-->
-		<el-dialog title="电核网核" @open="openDialog" :visible.sync="phoneFormVisible" :close-on-click-modal="false" width="58%" top="57px"  :modal="false"  customClass="dh_dialog">
+		<el-dialog title="电核网核" @open="openDialog" @close="closeDialog" :visible.sync="phoneFormVisible" :close-on-click-modal="false" width="58%" top="57px"  :modal="false"  customClass="dh_dialog">
     
 			<el-form  :model="contactsInfoForm" label-width="80px"   ref="contactsInfoForm">  
 <el-row :gutter="0">
-<el-col :span="14">
-				<el-tabs v-model="phonFormFirst"  tab-position="left" @tab-click="handleClick"  > 
-            <el-tab-pane  v-for="item in phoneForm"   :key="item.index"  :label="item.userName+' '+item.relationship+' '+item.userTelephone"  :name="item.id+''">                         
+<el-col :span="24" style="border:1px solid green;">
+				<el-tabs v-model="phonFormFirst"  tab-position="left" @tab-click="handleClick"> 
+            <el-tab-pane  v-for="item in phoneForm"   :key="item.index"  :label="item.userName+' '+item.relationship+' '+item.userTelephone"  :name="item.id+''" :userTelephone="item.userTelephone">                         
               <el-row :gutter="20" type="flex" class="row_bg"> 
-                          <el-col :span="12">
-                            <div class="grid_content bg_purple_light">网核</div>                          
-                            <div  style="border:1px solid #E4E8ED;width:320px;height:270px"></div>
+                          <el-col :span="23" style="border:1px solid red;height:358px;">
+                            <div class="bg_purple_light" whidth="323px">网核</div> 
+                            <div  style="border:1px solid #E4E8ED;height:310px;" scrolling="auto"> 
+                                      <el-tabs v-model="editableTabsValue" type="card" @tab-click="handle_click">
+                                        <el-tab-pane label="百度" name="first"><iframe :src="baidu" width="920px" height="260px" scrolling="auto"></iframe></el-tab-pane>
+                                        <el-tab-pane label="360搜索" name="second"><iframe :src="san" width="920px" height="260px" scrolling="auto"></iframe></el-tab-pane>
+                                        <el-tab-pane label="失信网" name="three"><iframe src="http://shixin.court.gov.cn/" width="920px" height="260px" scrolling="auto"></iframe></el-tab-pane>
+                                        <el-tab-pane label="人法网" name="four"><iframe src="" width="920px" height="260px" scrolling="auto"></iframe></el-tab-pane>
+                                        <el-tab-pane label="工商网" name="five"><iframe src="http://www.gsxt.gov.cn" width="920px" height="260px" scrolling="auto"></iframe></el-tab-pane>
+                                        <el-tab-pane label="初审备注" name="six">
+                                          	<el-button type="primary" @click="saveCSSubmit(item.id)" :loading="CsSaveLoading">保存</el-button>
+                                          <div :id="getCSEditorId(item.id)" style="border:1px solid #E4E8ED;width:660px;"></div>
+                                          </el-tab-pane>
+                                        <el-tab-pane label="终审备注" name="seven">
+                                          	<el-button type="primary" @click="saveZSSubmit(item.id)" :loading="ZsSaveLoading">保存</el-button>
+                                          <div :id="getZSEditorId(item.id)" style="border:1px solid #E4E8ED;width:660px;"></div>
+                                        </el-tab-pane>
+                                       </el-tabs>
+                            </div>
                            </el-col>                         
                </el-row>           
                <el-row :gutter="20" type="flex" class="row_bg">
-                      <el-col :span="12">
-                        <div class="grid_content bg_purple_light">
+                      <el-col :span="12">                      
+                        <div class="bg_purple_light">
                           <span class="span">姓名：</span>{{contactsInfo.userName}}&nbsp;&nbsp;
                           <span class="span">关系:</span>{{contactsInfo.relationship}}&nbsp;&nbsp;
                           <span class="span">电话：</span>{{contactsInfo.userTelephone}} 
@@ -112,24 +126,15 @@
             </el-tab-pane>          
          </el-tabs>   
 </el-col>
-<el-col :span="10">
-  <el-row :gutter="0">
-<el-col>
-    <div class="grid_content bg_purple_light">
-       初审备注</div><div id="cseditor" style="border:1px solid #E4E8ED;width:320px"></div>  
- </el-col> 
- </el-row>
-  <el-row :gutter="0">
-<el-col >
-    <div class="grid_content bg_purple_light">
-       终审备注</div> <div id="zseditor" style="border:1px solid #E4E8ED;width:320px"></div>  
- </el-col> 
- </el-row>
-</el-col>
+
+<div style="position:absolute;right:43px;bottom:270px;">
+    <div class="grid_content bg_purple_light" >
+          异常备注</div> <div id="yceditor" style="border:1px solid #E4E8ED;width:320px;position:absolute;"></div>  
+</div>
 </el-row>
 			</el-form>
       <div slot="footer" class="dialog-footer">
-				<el-button @click="phoneFormVisible = false">取消</el-button>
+				<el-button @click="phoneFormVisible=false">取消</el-button>
 				<el-button type="primary" @click="savePhoneInfoSubmit" :loading="phoneLoading">保存</el-button>
 			</div>
 		</el-dialog>
@@ -143,9 +148,8 @@
 
 export default {
   data() {
-    return {
-      cseditor: null,
-      zseditor: null,
+    return {   
+     
       filters: {
         orderNum: 'GZPHYB1542017061500003'
       },
@@ -216,23 +220,51 @@ export default {
       phonFormFirst: '',
       //循环左侧联系人信息form
       phoneForm:[],
+       //网核
+        baidu:'http://wwww.baidu.com/',
+        san:'http://www.so.com/',
+        editableTabsValue: 'first', 
+       //初审备注富文本编辑器
+       cseditor: null,
+       //初审备注富文本编辑器配置宽和高
+       csconfig: {
+         initialFrameWidth:666,  //初始化编辑器宽度,默认1000
+         initialFrameHeight:210  //初始化编辑器高度,默认320
+      },   
+       //初审备注
+       csContent:{},
+      //保存初审备注按钮Loading加载
+        CsSaveLoading: false,
+
+      //终审备注富文本编辑器
+       zseditor: null,      
+       //终审备注
+       zsContent:{},
+        //终审备注富文本编辑器配置宽和高
+       zsconfig: {
+         initialFrameWidth:666,  //初始化编辑器宽度,默认1000
+         initialFrameHeight:210  //初始化编辑器高度,默认320
+      },   
+      //保存终审备注按钮Loading加载
+        ZsSaveLoading: false,
+
       //电核备注联系人信息
       contactsInfo: {
         userName: '',
         relationship: '',
         userTelephone:''
-      },      
+      }, 
       //电核备注
-      contactsInfoRemark:{},
-      //初审备注
-      csContent:{},
-       //终审备注
-      zsContent:{}
-     
+      contactsInfoRemark:{}, 
+       //异常备注富文本编辑器
+       yceditor: null,      
+       //异常备注
+      ycContent:{},
+      
     };
   },
   methods: {   
-    //获取联系人列表
+   //获取联系人列表
     getResult: function() {
       var _this = this;
       this.listLoading = true;
@@ -304,11 +336,7 @@ export default {
         if (valid) {
           this.$confirm("确认提交吗？", "提示", {}).then(() => {
             this.editLoading = true;
-            let param = Object.assign({}, this.editForm);
-            // para.birth =
-            //   !para.birth || para.birth == ""
-            //     ? ""
-            //     : util.formatDate.format(new Date(para.birth), "yyyy-MM-dd");
+            let param = Object.assign({}, this.editForm);           
             this.$ajax({
               method: "post",
               url: "/api/carloansurveycontacts-api/updateCarLoanSurveyContacts",
@@ -354,33 +382,97 @@ export default {
     //显示电核网核界面
     handlePhone: function(index, row) {
       this.phoneFormVisible = true;
+      
       this.phoneForm = this.resultData;
       //联系人主键ID,根据联系人主键I默认选中电核网核tabs
       this.phonFormFirst = row.id + '';
       //根据电核网核联系人ID，查询电核网核联系人详细信息
       this.getContactsInfo(row.id);
       //根据电核网核联系人ID，查询电核网核联系人电核备注
-      this.getContactsInfoRemark(row.id);
-       //根据订单编号及备注类别查询初审备注
-     // this.getCSContent(this.filters.orderNum);
-      //根据订单编号及备注类别查询终审备注
-     // this.getZSContent(this.filters.orderNum);     
-   
-    },
-    //显示电核网核界面
-    handleClick(tab, event) {     
+      this.getContactsInfoRemark(row.id); 
+      //网核中百度tabs     
+      this.baidu='http://wwww.baidu.com/s?wd='+row.userTelephone;
+      //网核中360搜索tabs     
+      this.san='http://www.so.com/s?q='+row.userTelephone;
+          
+       
+    },   
+    //显示电核网核界面左侧联系人列表tabs点击事件
+    handleClick(tab, event) {  
        //根据电核网核联系人ID，查询电核网核联系人详细信息
       this.getContactsInfo(tab.name);
        //根据电核网核联系人ID，查询电核网核联系人电核备注
       this.getContactsInfoRemark(tab.name);
-      //根据订单编号及备注类别查询初审备注
-      //this.getCSContent(this.filters.orderNum);
-      //根据订单编号及备注类别查询终审备注
-      //this.getZSContent(this.filters.orderNum);  
-      
+      //网核中百度tabs   
+      this.baidu='http://wwww.baidu.com/s?wd='+tab.$attrs.userTelephone;
+       //网核中360搜索tabs     
+      this.san='http://www.so.com/s?q='+tab.$attrs.userTelephone;
+       
+
+       //初审备注赋值    
+       var $this=this;
+       this.getCSContent(tab.name,function(){
+
+          UE.getEditor(tab.name+'cseditor').setContent($this.csContent.content); 
+       });
+        //终审备注赋值    
+       var $this=this;
+       this.getZSContent(tab.name,function(){
+
+          UE.getEditor(tab.name+'zseditor').setContent($this.zsContent.content); 
+       });
      
-  
-    },
+    }, 
+    //网核界面内tabs点击事件
+     handle_click(tab, event) {    
+          if(tab.label=="人法网")
+          {
+           window.open("http://zhixing.court.gov.cn/search/","zhixing_court");  
+         }       
+      },
+     //初审备注保存按钮
+     saveCSSubmit: function(surveyInfoID) {        
+           //初审富文本编辑器内容
+            let CSContent =UE.getEditor(surveyInfoID+'cseditor').getContent();
+            this.CsSaveLoading = true;
+           let param = new URLSearchParams();            
+             param.append("relation_number",surveyInfoID);
+              param.append("biz_type","NET_CHECK_FIRSTAUDIT_REMARK");
+             param.append("Content",CSContent); 
+            this.$ajax({
+              method: "post",
+              url: "/api/carloanrichtext-api/insertCarLoanRichText",
+              data: param
+            }).then(res => {
+              this.CsSaveLoading = false;               
+              this.$message({
+                message: "保存成功",
+                type: "success"
+              });          
+            });  
+     },
+     //终审备注保存按钮
+     saveZSSubmit: function(surveyInfoID) {        
+           //初审富文本编辑器内容
+            let ZSContent =UE.getEditor(surveyInfoID+'zseditor').getContent();
+            this.ZsSaveLoading = true;
+           let param = new URLSearchParams();            
+             param.append("relation_number",surveyInfoID);
+              param.append("biz_type","NET_CHECK_LASTAUDIT_REMARK");
+             param.append("Content",ZSContent); 
+            this.$ajax({
+              method: "post",
+              url: "/api/carloanrichtext-api/insertCarLoanRichText",
+              data: param
+            }).then(res => {
+              this.ZsSaveLoading = false;               
+              this.$message({
+                message: "保存成功",
+                type: "success"
+              });          
+            });  
+     },
+
     //根据电核网核联系人ID，查询电核网核联系人详细信息
     getContactsInfo: function(contactsInfo_id) {
       var _this = this;     
@@ -420,11 +512,21 @@ export default {
         }
       );
     },
-   //根据订单编号及备注类别查询初审备注
-    getCSContent: function(order_number) {
+     //根据联系人索引给初审富文本编辑器重新赋值id
+     getCSEditorId:function(surveyInfoID){    
+         
+      return surveyInfoID+'cseditor';
+    },
+     //根据联系人索引给终审富文本编辑器重新赋值id
+     getZSEditorId:function(surveyInfoID){    
+         
+      return surveyInfoID+'zseditor';
+    },
+    //根据订单编号及备注类别查询初审备注
+    getCSContent: function(surveyInfoID,callback) {
       var _this = this;     
       let param = new URLSearchParams();
-      param.append("order_number", order_number);
+      param.append("relation_number", surveyInfoID);
       param.append("biz_type","NET_CHECK_FIRSTAUDIT_REMARK");
       this.$ajax({
         method: "post",
@@ -432,7 +534,10 @@ export default {
         data: param
       }).then(
         function(resultData) {
-          _this.csContent = resultData.data.data;          
+          _this.csContent = resultData.data.data;   
+          if(callback){
+            callback();
+          }       
           console.log(_this.csContent);
         },
         function(resultData) {
@@ -441,11 +546,11 @@ export default {
         }
       );
     },
-    //根据订单编号及备注类别查询终审备注
-    getZSContent: function(order_number) {
+     //根据订单编号及备注类别查询终审备注
+    getZSContent: function(surveyInfoID,callback) {
       var _this = this;     
       let param = new URLSearchParams();
-      param.append("order_number", order_number);
+      param.append("relation_number", surveyInfoID);
       param.append("biz_type","NET_CHECK_LASTAUDIT_REMARK");
       this.$ajax({
         method: "post",
@@ -453,7 +558,11 @@ export default {
         data: param
       }).then(
         function(resultData) {
-          _this.zsContent = resultData.data.data; 
+          _this.zsContent = resultData.data.data;   
+          if(callback){
+            callback();
+          }       
+          console.log(_this.zsContent);
         },
         function(resultData) {
           _this.resultData.message = "Local Reeuest Error!";
@@ -461,29 +570,47 @@ export default {
         }
       );
     },
-
+    //根据订单编号及备注类别查询异常备注
+    getYCContent: function(order_number) {
+      var _this = this;     
+      let param = new URLSearchParams();
+      param.append("relation_number", order_number);
+      param.append("biz_type","NET_CHECK_THREEAUDIT_REMARK");
+      this.$ajax({
+        method: "post",
+        url: "/api/carloanrichtext-api/searchCarLoanRichText",
+        data: param
+      }).then(
+        function(resultData) {
+          _this.ycContent = resultData.data.data; 
+        },
+        function(resultData) {
+          _this.resultData.message = "Local Reeuest Error!";
+          console.log(resultData);
+        }
+      );
+    },
      //电核网核保存按钮
-    savePhoneInfoSubmit: function() {    
+     savePhoneInfoSubmit: function() {    
       this.$refs.contactsInfoForm.validate(valid => {
         if (valid) {
-          this.$confirm("确认提交吗？", "提示", {}).then(() => {
-            //初审富文本编辑器内容
-              let cseditor =this.cseditor.getContent();
-           //终审富文本编辑器内容
-              let zseditor =this.zseditor.getContent();
+          this.$confirm("确认提交吗？", "提示", {}).then(() => {          
+           //异常富文本编辑器内容
+              let yceditor =this.yceditor.getContent();
             this.phoneLoading = true;
            let param = new URLSearchParams();          
              param.append("order_number", this.filters.orderNum);
-             param.append("otherRemark", this.contactsInfoRemark.otherRemark);
-             param.append("csContent", cseditor);
-             param.append("zsContent",zseditor);  
+             param.append("otherRemark", this.contactsInfoRemark.otherRemark);            
+             param.append("ycContent",yceditor);  
              param.append("contactsInfo_id",this.phonFormFirst);                
             this.$ajax({
               method: "post",
               url: "/api/carloansurveyinfo-api/saveCarLoanSurveyInfo",
               data: param
             }).then(res => {
-              this.phoneLoading = false;
+              this.phoneLoading = false;   
+            //根据订单编号及备注类别查询异常备注，初始赋值方便编辑器赋值，否则富文本编辑器初次无值
+            this.getYCContent(this.filters.orderNum);   
               this.$message({
                 message: "提交成功",
                 type: "success"
@@ -497,34 +624,63 @@ export default {
       });
     } ,
     //Dialog 对话框回调才能渲染出富文本编辑器
-    openDialog:function(){
+    openDialog:function(){    
+   
         this.$nextTick(function () { 
-            this.cseditor = UE.getEditor('cseditor');          
-            this.zseditor = UE.getEditor('zseditor');  
-            var $this=this;        
-            this.cseditor.ready(function() {               
-               $this.$nextTick(function(){ 
-                UE.getEditor('cseditor').setContent($this.csContent.content);
-              });
-            });
-            this.zseditor.ready(function(){              
+           var $this=this; 
+              //循环渲染初审备注富文本编辑器
+             for(var i=0;i<this.phoneForm.length;i++){                   
+                 this.cseditor = UE.getEditor(this.phoneForm[i].id+''+ 'cseditor',this.csconfig); 
+               }   
+                //循环渲染终审备注富文本编辑器
+             for(var i=0;i<this.phoneForm.length;i++){                   
+                 this.zseditor = UE.getEditor(this.phoneForm[i].id+''+ 'zseditor',this.zsconfig); 
+               }   
+
+                //给渲染后的备注赋值 
+              //    this.cseditor.ready(function(){  
+              //       UE.getEditor(this.phonFormFirst+'editor').setContent($this.csContent.content); 
+                              
+              //  });
+
+            //渲染异常备注富文本编辑器
+            this.yceditor = UE.getEditor('yceditor');            
+            this.yceditor.ready(function(){              
               $this.$nextTick(function(){
-                UE.getEditor('zseditor').setContent($this.zsContent.content);
+                UE.getEditor('yceditor').setContent($this.ycContent.content);
               });
             });
+           //打开电核网核初审备注赋值
+          this.cseditor.ready(function(){
+            $this.getCSContent($this.phonFormFirst,function(){
+
+              UE.getEditor($this.phonFormFirst+'cseditor').setContent($this.csContent.content); 
+          });  
+          });
+           //打开电核网核终审备注赋值
+            this.zseditor.ready(function(){
+            $this.getZSContent($this.phonFormFirst,function(){
+
+              UE.getEditor($this.phonFormFirst+'zseditor').setContent($this.zsContent.content); 
+          });  
+          });
          })
       
+       },
+        closeDialog:function(){
+          //  this.$nextTick(function () {
+          //   this.editor.destroy();
+          // })
+           
        }
   },
   mounted() {
     //获取联系人列表
-    this.getResult();
-     //根据订单编号及备注类别查询初审备注，初始赋值方便编辑器赋值，否则富文本编辑器初次无值
-    this.getCSContent(this.filters.orderNum);
-    //根据订单编号及备注类别查询终审备注，初始赋值方便编辑器赋值，否则富文本编辑器初次无值
-    this.getZSContent(this.filters.orderNum);    
+    this.getResult();   
+    //根据订单编号及备注类别查询异常备注，初始赋值方便编辑器赋值，否则富文本编辑器初次无值
+    this.getYCContent(this.filters.orderNum);    
 
-    
+   
   }
 };
 </script>
@@ -577,7 +733,7 @@ body {
 }
 .grid_content {
   border-radius: 4px;
-  min-height: 36px;
+  // min-height: 36px;
   width: 323px;
 }
 .bg_purple_light {

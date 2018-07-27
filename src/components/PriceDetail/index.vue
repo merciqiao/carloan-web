@@ -44,8 +44,7 @@
                         </el-tab-pane>
                          <el-tab-pane label="电核网核">
                             <survey-contacts></survey-contacts>
-                        </el-tab-pane>
-                       
+                        </el-tab-pane>                     
                     </el-tabs>
                 </div>
             </el-col>
@@ -62,7 +61,6 @@ import CheckOpinion from './Tabs/CheckOpinion'
 import CustomReconsider from './Tabs/CustomReconsider'
 import FinalCheck from './Tabs/FinalCheck'
 import SurveyContacts from './Tabs/SurveyContacts'
-
 export default {
   components: {
     CarInfo,
