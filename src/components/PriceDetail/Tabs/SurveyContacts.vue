@@ -30,8 +30,7 @@
 		      	</el-table-column>    
         </el-table>
     <!--新增界面-->
-		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
-         
+		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">         
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="姓名" prop="userName">
 					<el-input v-model="addForm.userName" auto-complete="off"></el-input>
@@ -39,12 +38,7 @@
         <el-form-item label="电话类型" prop="contactType">
 					<!-- <el-input v-model="addForm.contactType" auto-complete="off"></el-input> -->
            <el-select v-model="addForm.contactType" placeholder="请选择">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
+                  <el-option v-for="item in options"  :key="item.value"  :label="item.label"  :value="item.value"></el-option>
             </el-select>
 				</el-form-item>
 			 <el-form-item label="关系" prop="relationship">
@@ -74,12 +68,7 @@
         <el-form-item label="电话类型" prop="contactType">
 					<!-- <el-input v-model="editForm.contactType" auto-complete="off"></el-input> -->
           <el-select v-model="editForm.contactType" placeholder="请选择">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
+                  <el-option  v-for="item in options"   :key="item.value"  :label="item.label" :value="item.value"> </el-option>
             </el-select>
 				</el-form-item>
 			 <el-form-item label="关系" prop="relationship">
