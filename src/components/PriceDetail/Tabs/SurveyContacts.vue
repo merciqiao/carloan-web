@@ -104,11 +104,11 @@
  	<el-dialog title="电核网核" @open="openDialog" @close="closeDialog" :visible.sync="phoneFormVisible" :close-on-click-modal="false" width="58%" top="57px"  :modal="false"  customClass="dh_dialog">                                  
 			<el-form  :model="contactsInfoForm" label-width="80px"   ref="contactsInfoForm">  
     <el-row :gutter="0">
-     <el-col :span="24" style="border:1px solid green;">                                  
+      <el-col :span="24" style=" solid "> <!--border:1px green;-->
 				<el-tabs v-model="phonFormFirst"  tab-position="left" @tab-click="handleClick"> 
             <el-tab-pane  v-for="item in phoneForm"   :key="item.index"  :label="item.userName+' '+item.relationship+' '+item.userTelephone"  :name="item.id+''" :userTelephone="item.userTelephone">                         
               <el-row :gutter="20" type="flex" class="row_bg"> 
-                          <el-col :span="23" style="border:1px solid red;height:358px;">
+                          <el-col :span="23" style=" solid ;height:358px;"> <!--border:1px red -->
                             <div class="bg_purple_light" whidth="323px">网核</div> 
                             <div  style="border:1px solid #E4E8ED;height:310px;" scrolling="auto"> 
                                 <div class="#F8F8FF;" whidth="323px"> 
