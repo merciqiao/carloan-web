@@ -37,7 +37,15 @@
 					<el-input v-model="addForm.userName" auto-complete="off"></el-input>
 				</el-form-item>
         <el-form-item label="电话类型" prop="contactType">
-					<el-input v-model="addForm.contactType" auto-complete="off"></el-input>
+					<!-- <el-input v-model="addForm.contactType" auto-complete="off"></el-input> -->
+           <el-select v-model="addForm.contactType" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+            </el-select>
 				</el-form-item>
 			 <el-form-item label="关系" prop="relationship">
 					<el-input v-model="addForm.relationship" auto-complete="off"></el-input>
@@ -64,7 +72,15 @@
 					<el-input v-model="editForm.userName" auto-complete="off"></el-input>
 				</el-form-item>
         <el-form-item label="电话类型" prop="contactType">
-					<el-input v-model="editForm.contactType" auto-complete="off"></el-input>
+					<!-- <el-input v-model="editForm.contactType" auto-complete="off"></el-input> -->
+          <el-select v-model="editForm.contactType" placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+            </el-select>
 				</el-form-item>
 			 <el-form-item label="关系" prop="relationship">
 					<el-input v-model="editForm.relationship" auto-complete="off"></el-input>
@@ -186,11 +202,30 @@ export default {
       addFormVisible: false,
       //添加按钮Loading加载
       addLoading: false,
+      options: [{
+          value: '工作电话',
+          label: '工作电话'
+        }, {
+          value: '家庭电话',
+          label: '家庭电话'
+        }, {
+          value: '联系人电话',
+          label: '联系人电话'
+        }, {
+          value: '本人电话',
+          label: '本人电话'
+        }, {
+          value: '网查三方',
+          label: '网查三方'
+        }, {
+          value: '114三方',
+          label: '114三方'
+        }],
       //输入框验证
       addFormRules: {
         userName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         contactType: [
-          { required: true, message: "请输入电话类型", trigger: "blur" }
+          { required: true, message: "请选择电话类型", trigger: "blur" }
         ],
         relationship: [
           { required: true, message: "请输入关系", trigger: "blur" }
@@ -216,7 +251,7 @@ export default {
       editFormRules: {
         userName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         contactType: [
-          { required: true, message: "请输入电话类型", trigger: "blur" }
+          { required: true, message: "请选择电话类型", trigger: "blur" }
         ],
         relationship: [
           { required: true, message: "请输入关系", trigger: "blur" }
