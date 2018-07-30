@@ -280,7 +280,7 @@ export default {
       //初审备注富文本编辑器配置宽和高
       csconfig: {
         initialFrameWidth: 666, //初始化编辑器宽度,默认1000
-        initialFrameHeight: 210 //初始化编辑器高度,默认320
+        initialFrameHeight: 180 //初始化编辑器高度,默认320
       },
       //初审备注
       csContent: {},
@@ -294,7 +294,7 @@ export default {
       //终审备注富文本编辑器配置宽和高
       zsconfig: {
         initialFrameWidth: 666, //初始化编辑器宽度,默认1000
-        initialFrameHeight: 210 //初始化编辑器高度,默认320
+        initialFrameHeight: 180 //初始化编辑器高度,默认320
       },
       //保存终审备注按钮Loading加载
       ZsSaveLoading: false,
