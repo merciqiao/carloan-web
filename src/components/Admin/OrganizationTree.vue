@@ -190,8 +190,9 @@ export default {
          this.$confirm("确认删除该记录吗?", "提示", {
         type: "warning"
          })
-        .then(() => {        
-          let param = { orgid:node.data.id};
+        .then(() => {
+        let param = new URLSearchParams();
+        param.append("orgid", node.data.id);
           this.$ajax({
             method: "post",
             url: "/api/sysorg-api/deleteSysOrg",
@@ -200,17 +201,16 @@ export default {
             this.$message({
               message: "删除成功",
               type: "success"
-            });           
+            }); 
             const parent = node.parent;
             const children = parent.data.children || parent.data;
             const index = children.findIndex(d => d.id === data.id);
-            children.splice(index, 1);
+            children.splice(index, 1);         
+           
           });
         })
         .catch(() => {});
-
-
-    
+            
     },  
     //新增
     addSubmit: function() {      
