@@ -1,6 +1,6 @@
 <template> 
 <el-row :gutter="20"> 
-  <el-col :span="5">
+  <el-col :span="8">
       <div class="custom-tree-container">  
             <div class="block">   
                 <el-tree   :data="treeData" :props="defaultProps"   node-key="id"    :expand-on-click-node="false" >   
@@ -15,7 +15,7 @@
         </div>
 </div>
 </el-col>
-<el-col :span="19">
+<el-col :span="16">
      <!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">         
 			<el-form :model="addForm" label-width="80px" :rules="formRules" ref="addForm">
