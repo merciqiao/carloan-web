@@ -2,7 +2,8 @@
     <el-row>
         <el-col :span="4" class="dashHeight" :style="dashHeight">
             <el-menu
-              default-active="1"
+              default-active="$route.path"
+              router
               class="dashHeight"
             >
                 <el-submenu index="1">
@@ -10,7 +11,15 @@
                         <i class="el-icon-document"></i>
                         <span slot="title">工作台</span>
                     </template>
-                    <el-menu-item index="1-1">我的任务</el-menu-item>
+                    <el-menu-item index="/pricepost">我的任务</el-menu-item>
+                    <el-menu-item index="/workpiece">工作件查询</el-menu-item>
+                </el-submenu>
+                <el-submenu index="2">
+                    <template slot="title">
+                        <i class="el-icon-document"></i>
+                        <span slot="title">信审管理</span>
+                    </template>
+                    <el-menu-item index="/flowmonitor">业务流程监控</el-menu-item>
                 </el-submenu>
             </el-menu>
         </el-col>

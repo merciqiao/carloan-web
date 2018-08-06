@@ -3,7 +3,7 @@
         <el-collapse v-model="his_col_val">
             <el-collapse-item title="车牌号匹配" name="1">
                 <el-table
-                    :data="plateData"
+                    :data="carNumMatch.slice((currentPage1-1)*pageSize1,currentPage1*pageSize1)"
                     border
                     style="width: 100%">
                     <el-table-column
@@ -66,19 +66,19 @@
                 </el-table>
                 <div class="page_container">
                     <el-pagination
-                        @size-change="handlePlateSizeChange"
-                        @current-change="handlePlateCurrentChange"
-                        :current-page="currentPlatePage"
-                        :page-sizes="[5,10,15,20]"
-                        :page-size="5"
+                        @size-change="handleSizeChange1"
+                        @current-change="handleCurrentChange1"
+                        :current-page="currentPage1"
+                        :page-sizes="[2,10,15,20]"
+                        :page-size="2"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="plateData.length">
+                        :total="carNumMatch.length">
                     </el-pagination>
                 </div>
             </el-collapse-item>
             <el-collapse-item title="车架号匹配" name="2">
                 <el-table
-                    :data="frameData"
+                    :data="carFraMatch.slice((currentPage2-1)*pageSize2,currentPage2*pageSize2)"
                     border
                     style="width: 100%">
                     <el-table-column
@@ -141,19 +141,19 @@
                 </el-table>
                 <div class="page_container">
                     <el-pagination
-                        @size-change="handleFrameSizeChange"
-                        @current-change="handleFrameCurrentChange"
-                        :current-page="currentFramePage"
-                        :page-sizes="[5,10,15,20]"
-                        :page-size="5"
+                        @size-change="handleSizeChange2"
+                        @current-change="handleCurrentChange2"
+                        :current-page="currentPage2"
+                        :page-sizes="[2,10,15,20]"
+                        :page-size="2"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="frameData.length">
+                        :total="carFraMatch.length">
                     </el-pagination>
                 </div>
             </el-collapse-item>
             <el-collapse-item title="身份证匹配" name="3">
                 <el-table
-                    :data="idCardData"
+                    :data="idMatch.slice((currentPage3-1)*pageSize3,currentPage3*pageSize3)"
                     border
                     style="width: 100%">
                     <el-table-column
@@ -216,19 +216,19 @@
                 </el-table>
                 <div class="page_container">
                     <el-pagination
-                        @size-change="handleFrameSizeChange"
-                        @current-change="handleFrameCurrentChange"
-                        :current-page="currentFramePage"
-                        :page-sizes="[5,10,15,20]"
-                        :page-size="5"
+                        @size-change="handleSizeChange3"
+                        @current-change="handleCurrentChange3"
+                        :current-page="currentPage3"
+                        :page-sizes="[2,10,15,20]"
+                        :page-size="2"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="frameData.length">
+                        :total="idMatch.length">
                     </el-pagination>
                 </div>
             </el-collapse-item>
             <el-collapse-item title="手机号匹配" name="4">
                 <el-table
-                    :data="telData"
+                    :data="phoneMatch.slice((currentPage4-1)*pageSize4,currentPage4*pageSize4)"
                     border
                     style="width: 100%">
                     <el-table-column
@@ -287,13 +287,13 @@
                 </el-table>
                 <div class="page_container">
                     <el-pagination
-                        @size-change="handleFrameSizeChange"
-                        @current-change="handleFrameCurrentChange"
-                        :current-page="currentFramePage"
-                        :page-sizes="[5,10,15,20]"
-                        :page-size="5"
+                        @size-change="handleSizeChange4"
+                        @current-change="handleCurrentChange4"
+                        :current-page="currentPage4"
+                        :page-sizes="[2,10,15,20]"
+                        :page-size="2"
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="frameData.length">
+                        :total="phoneMatch.length">
                     </el-pagination>
                 </div>
             </el-collapse-item>
@@ -305,138 +305,43 @@ export default{
     data() {
         return {
             his_col_val: ['1','2','3','4'],
-            currentPlatePage: 1,
-            currentFramePage: 1,
-            pageSize:5,
-            pageNumber:1,
-            plateData: [{
-                entryDate: '2011-09-05',
-                orderNumber: 'BJ00069888',
-                productType: '鸿途融',
-                userName: '小王',
-                idCard: '110***',
-                doyouApprove: '###',
-                approvalAmount: '###',
-                approvalTerm: '###',
-                creLastUser: '###',
-                secondLevelName: '###',
-                customerManager: '###',
-                storeAppraiser: '###',
-            },{
-                entryDate: '2011-09-05',
-                orderNumber: 'BJ00069888',
-                productType: '鸿途融',
-                userName: '小王',
-                idCard: '110***',
-                doyouApprove: '###',
-                approvalAmount: '###',
-                approvalTerm: '###',
-                creLastUser: '###',
-                secondLevelName: '###',
-                customerManager: '###',
-                storeAppraiser: '###',
-            }],
-            frameData: [{
-                entryDate: '2011-09-05',
-                orderNumber: 'BJ00069888',
-                productType: '鸿途融',
-                userName: '小王',
-                idCard: '110***',
-                doyouApprove: '###',
-                approvalAmount: '###',
-                approvalTerm: '###',
-                creLastUser: '###',
-                secondLevelName: '###',
-                customerManager: '###',
-                storeAppraiser: '###',
-            },{
-                entryDate: '2011-09-05',
-                orderNumber: 'BJ00069888',
-                productType: '鸿途融',
-                userName: '小王',
-                idCard: '110***',
-                doyouApprove: '###',
-                approvalAmount: '###',
-                approvalTerm: '###',
-                creLastUser: '###',
-                secondLevelName: '###',
-                customerManager: '###',
-                storeAppraiser: '###',
-            }],
-            idCardData: [{
-                entryDate: '2011-09-05',
-                orderNumber: 'BJ00069888',
-                productType: '鸿途融',
-                carNumber: '###',
-                carFrameNumber: '###',
-                doyouApprove: '###',
-                approvalAmount: '###',
-                approvalTerm: '###',
-                creLastUser: '###',
-                secondLevelName: '###',
-                customerManager: '###',
-                storeAppraiser: '###',
-            },{
-                entryDate: '2011-09-05',
-                orderNumber: 'BJ00069888',
-                productType: '鸿途融',
-                carNumber: '###',
-                carFrameNumber: '###',
-                doyouApprove: '###',
-                approvalAmount: '###',
-                approvalTerm: '###',
-                creLastUser: '###',
-                secondLevelName: '###',
-                customerManager: '###',
-                storeAppraiser: '###',
-            }],
-            telData: [{
-                entryDate: '2011-09-05',
-                orderNumber: 'BJ00069888',
-                productType: '鸿途融',
-                userName: '###',
-                doyouApprove: '###',
-                approvalAmount: '###',
-                approvalTerm: '###',
-                creLastUser: '###',
-                secondLevelName: '###',
-                customerManager: '###',
-                storeAppraiser: '###',
-            },{
-                entryDate: '2011-09-05',
-                orderNumber: 'BJ00069888',
-                productType: '鸿途融',
-                userName: '###',
-                doyouApprove: '###',
-                approvalAmount: '###',
-                approvalTerm: '###',
-                creLastUser: '###',
-                secondLevelName: '###',
-                customerManager: '###',
-                storeAppraiser: '###',
-            }],
+            currentPage1: 1,
+            pageSize1:2,
+            currentPage2: 1,
+            pageSize2:2,
+            currentPage3: 1,
+            pageSize3:2,
+            currentPage4: 1,
+            pageSize4:2,
         }
     },
     methods: {
-        handlePlateSizeChange(val) {
-            this.pageSize = val;
+        handleSizeChange1(val) {
+            this.pageSize1 = val;
         },
-        handlePlateCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-            let startRow = (val - 1) * this.pageSize + 1;
-            let endRow = val * this.pageSize;
-            this.plateData = this.plateData.slice(startRow,endRow);
+        handleCurrentChange1(val) {
+            this.currentPage1 = val;
         },
-        handleFrameSizeChange(val) {
-            this.pageSize = val;
+        handleSizeChange2(val) {
+            this.pageSize2 = val;
         },
-        handleFrameCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-            let startRow = (val - 1) * this.pageSize + 1;
-            let endRow = val * this.pageSize;
-            this.frameData = this.frameData.slice(startRow,endRow);
+        handleCurrentChange2(val) {
+            this.currentPage2 = val;
         },
-    }
+        handleSizeChange3(val) {
+            this.pageSize3 = val;
+        },
+        handleCurrentChange3(val) {
+            this.currentPage3 = val;
+        },
+        handleSizeChange4(val) {
+            this.pageSize4 = val;
+        },
+        handleCurrentChange4(val) {
+            this.currentPage4 = val;
+        }
+    },
+    props: ['carNumMatch','carFraMatch','idMatch','phoneMatch']
 }
 </script>
 <style lang="less">

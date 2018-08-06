@@ -2,88 +2,96 @@
     <div class="p20">
         <el-row>
             <el-col :span="2"><span>进件编号：</span></el-col>
-            <el-col :span="4"><el-input size="mini"></el-input></el-col>
+            <el-col :span="4"><el-input size="mini" v-model="bIZINFNO"></el-input></el-col>
             <el-col :span="2"><span>承租人姓名：</span></el-col>
-            <el-col :span="4"><el-input size="mini"></el-input></el-col>
+            <el-col :span="4"><el-input size="mini" v-model="uSERNAME"></el-input></el-col>
             <el-col :span="2"><span>任务类型：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="taskValue">
-                    <el-option v-for="item in taskType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select placeholder="请选择" size="mini" v-model="cURACTNAME">
+                    <el-option v-for="item in taskType" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
                 </el-select>
             </el-col>
             <el-col :span="2"><span>案件状态：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="statusValue">
-                    <el-option v-for="item in taskStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select placeholder="请选择" size="mini" v-model="oRDERSTATUS">
+                    <el-option v-for="item in caseStatus" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
                 </el-select>
             </el-col>
         </el-row>
         <el-row class="mt20">
             <el-col :span="2"><span>客户经理：</span></el-col>
-            <el-col :span="4"><el-input size="mini"></el-input></el-col>
+            <el-col :span="4"><el-input size="mini" v-model="cUSTOMERMANAGER"></el-input></el-col>
             <el-col :span="2"><span>区域：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="provinceValue">
-                    <el-option v-for="item in provinceName" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select placeholder="请选择" size="mini" v-model="SECONDLEVELID" @change="changeRegional">
+                    <el-option v-for="item in regionalData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-col>
             <el-col :span="2"><span>城市：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="cityValue">
-                    <el-option v-for="item in cityName" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select placeholder="请选择" size="mini" v-model="eNTRYORGID">
+                    <el-option v-for="item in cityData" :key="item.id" :label="item.name" :value="item.value"></el-option>
                 </el-select>
             </el-col>
             <el-col :span="6">
                 <div class="ml">
-                    <el-button size="mini">重置</el-button>
-                    <el-button size="mini" type="primary">查询</el-button>
+                    <el-button size="mini" @click="resetQuery">重置</el-button>
+                    <el-button size="mini" type="primary" @click="handleQuery">查询</el-button>
                 </div>
             </el-col>
         </el-row>
         <div class="table_container">
             <el-table
-                :data="beforeCheckData.slice(0,5)"
+                :data="beforeCompleteData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                 border
                 style="width: 100%"
             >
                 <el-table-column
-                    prop="id"
+                    type="index"
                     label="序号"
                     width="50">
                 </el-table-column>
                 <el-table-column
-                    prop="number"
+                    prop="bIZINFNO"
                     label="进件编号"
                     width="210">
+                    <template slot-scope="scope">
+                        <el-button @click="handleClick(scope.row)" type="text" size="mini">{{scope.row.bIZINFNO}}</el-button>
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="name"
-                    label="承租人姓名"
+                    prop="uSERNAME"
+                    label="客户姓名"
                     width="100">
                 </el-table-column>
                 <el-table-column
-                    prop="type"
+                    prop="pHONENUMBER"
+                    label="手机号码"
+                    width="130">
+                </el-table-column>
+                <el-table-column
+                    prop="pRODUCTTYPE"
                     label="产品类型"
                     width="100">
                 </el-table-column>
                 <el-table-column
-                    prop="taskType"
+                    prop="cURACTNAME"
                     label="任务类型">
                 </el-table-column>
                 <el-table-column
-                    prop="caseStatus"
+                    prop="oRDERSTATUS"
                     label="案件状态">
                 </el-table-column>
                 <el-table-column
-                    prop="store"
+                    prop="eNTRYORGName"
                     label="进件门店">
                 </el-table-column>
                 <el-table-column
-                    prop="manager"
+                    prop="cUSTOMERMANAGER"
                     label="客户经理">
                 </el-table-column>
                 <el-table-column
-                    prop="enterTime"
+                    prop="eNTRYDATE"
                     label="进件时间">
                 </el-table-column>
             </el-table>
@@ -95,159 +103,127 @@
                     :page-sizes="[5,10,15,20]"
                     :page-size="5"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="beforeCheckData.length">
-                </el-pagination>
+                    :total="beforeCompleteData.length">
+                </el-pagination>    
             </div>
         </div>
     </div>
 </template>
 <script>
+import { mapState } from 'vuex' 
 export default {
     data() {
         return {
             currentPage:1,
             pageSize:5,
-            pageNumber:1,
-            taskType: [{
-                value:'1',
-                label: '定价审批'
-            },{
-                value:'2',
-                label: '车贷审批'
-            },{
-                value:'3',
-                label: '车贷复议审批'
-            }],
-            taskStatus: [{
-                value:'1',
-                label: '状态一'
-            },{
-                value:'2',
-                label: '状态二'
-            },{
-                value:'3',
-                label: '状态三'
-            }],
-            provinceName: [{
-                value:'1',
-                label:'北京'
-            },{
-                value:'2',
-                label:'天津'
-            },{
-                value:'3',
-                label:'上海'
-            }],
-            cityName: [{
-                value:'1',
-                label:'杭州'
-            },{
-                value:'2',
-                label:'合肥'
-            },{
-                value:'3',
-                label:'沈阳'
-            }],
-            taskValue: '',
-            statusValue: '',
-            provinceValue: '',
-            cityValue: '',
-            beforeCheckData: [{
-                id:'1',
-                number:'BJPHYB2017060800026XXX',
-                name:'张三',
-                type: '鸿途融',
-                taskType:'定价审批',
-                caseStatus:'未完成',
-                store:'光华路店',
-                manager:'王总',
-                enterTime:'2018-6-28 15:20'
-            },{
-                id:'2',
-                number:'BJPHYB2017060800026XXX',
-                name:'张三',
-                type: '鸿途融',
-                taskType:'定价审批',
-                caseStatus:'未完成',
-                store:'光华路店',
-                manager:'王总',
-                enterTime:'2018-6-28 15:20'
-            },{
-                id:'3',
-                number:'BJPHYB2017060800026XXX',
-                name:'张三',
-                type: '鸿途融',
-                taskType:'定价审批',
-                caseStatus:'未完成',
-                store:'光华路店',
-                manager:'王总',
-                enterTime:'2018-6-28 15:20'
-            },{
-                id:'4',
-                number:'BJPHYB2017060800026XXX',
-                name:'张三',
-                type: '鸿途融',
-                taskType:'定价审批',
-                caseStatus:'未完成',
-                store:'光华路店',
-                manager:'王总',
-                enterTime:'2018-6-28 15:20'
-            },{
-                id:'5',
-                number:'BJPHYB2017060800026XXX',
-                name:'张三',
-                type: '鸿途融',
-                taskType:'定价审批',
-                caseStatus:'未完成',
-                store:'光华路店',
-                manager:'王总',
-                enterTime:'2018-6-28 15:20'
-            },{
-                id:'6',
-                number:'BJPHYB2017060800026XXX',
-                name:'张三',
-                type: '鸿途融',
-                taskType:'定价审批',
-                caseStatus:'未完成',
-                store:'光华路店',
-                manager:'王总',
-                enterTime:'2018-6-28 15:20'
-            },{
-                id:'7',
-                number:'BJPHYB2017060800026XXX',
-                name:'张三',
-                type: '鸿途融',
-                taskType:'定价审批',
-                caseStatus:'未完成',
-                store:'光华路店',
-                manager:'王总',
-                enterTime:'2018-6-28 15:20'
-            },{
-                id:'8',
-                number:'BJPHYB2017060800026XXX',
-                name:'张三',
-                type: '鸿途融',
-                taskType:'定价审批',
-                caseStatus:'未完成',
-                store:'光华路店',
-                manager:'王总',
-                enterTime:'2018-6-28 15:20'
-            }],
-            displayTableData: [].concat(this.beforeCheckData),
-            //查询modal
+            //查询
+            bIZINFNO: '',
+            uSERNAME: '',
+            cURACTNAME: '',
+            oRDERSTATUS: '',
+            cUSTOMERMANAGER: '',
+            SECONDLEVELID: '',
+            eNTRYORGID: ''
         }
     },
     methods: {
+        handleClick(row) {
+            this.$router.push({ name:'PriceDetail', params: {order_number:row.bIZINFNO, status:2, actName: row.cURACTNAME}});
+            this.$store.dispatch('getAuditTabs',{
+                biztype: row.bIZTYPE,
+                actName: row.cURACTNAME,
+                statusId: 2
+            });
+            //保存定价结论的参数
+            this.$store.commit('addParamsForPrice',{
+                actName: row.cURACTNAME,
+                auditState: "",
+                bizType: row.bIZTYPE,
+                carInfoId: "",
+                creationTime: "",
+                currentApprover: "",
+                id: 0,
+                orderNumber: row.bIZINFNO,
+                pricingProductType: "",
+                processId: row.cUREXEID,
+                staTus: "",
+                transition: "",
+                updateTime: ""
+            });
+            //保存审核意见的参数
+            this.$store.commit('addParamsForAudit',{
+                auditState:"",
+                bizType: row.bIZTYPE,
+                carInfoId:"",
+                creationTime:"",
+                currentApprover:"",
+                currentExaminationPost:row.cURACTNAME,
+                id:0,
+                orderNumber: row.bIZINFNO,
+                processId: row.cUREXEID,
+                productType: row.pRODUCTTYPE,
+                staTus:"",
+                updateTime:""
+            });
+            //保存反欺诈查询的参数
+            this.$store.commit('addParamsForAnit', {
+                 approver: "",
+                 auditState: "",
+                 carInfoId: "",
+                 createTime: "",
+                 ext1: "",
+                 ext2: "",
+                 id: 0,
+                 orderNumber: row.bIZINFNO,
+                 processId: row.cUREXEID, 
+                 staTus: "",
+                 subOption: "",
+                 updateTime: "",
+                 validateState: 0
+            });
+        },
         handleSizeChange(val) {
             this.pageSize = val;
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-            let startRow = (val - 1) * this.pageSize + 1;
-            let endRow = val * this.pageSize;
-            this.beforeCheckData = this.beforeCheckData.slice(startRow,endRow);
-            console.log(this.displayTableData.length);
+            this.currentPage = val;
+        },
+        handleQuery() {
+            let queryObj = {};
+            queryObj.bIZINFNO = this.bIZINFNO;
+            queryObj.uSERNAME = this.uSERNAME;
+            queryObj.cURACTNAME = this.cURACTNAME;
+            queryObj.oRDERSTATUS = this.oRDERSTATUS;
+            queryObj.cUSTOMERMANAGER = this.cUSTOMERMANAGER;
+            queryObj.SECONDLEVELID = this.SECONDLEVELID;
+            queryObj.eNTRYORGID = this.eNTRYORGID;
+            this.$store.dispatch('getBeforeComplete',queryObj);
+        },
+        changeRegional(id) {
+            this.$store.dispatch('getCity', {
+                id:id
+            })
+        },
+        resetQuery() {
+            this.bIZINFNO = "";
+            this.uSERNAME = "";
+            this.cURACTNAME = "";
+            this.oRDERSTATUS = "";
+            this.cUSTOMERMANAGER = "";
+            this.SECONDLEVELID = "";
+            this.eNTRYORGID = "";
         }
+    },
+    computed:mapState({
+        beforeCompleteData: state => state.myTask.beforeComplete_case,
+        regionalData: state => state.myTask.regional_data,
+        cityData: state => state.myTask.city_data,
+        taskType: state => state.myTask.task_type,
+        caseStatus: state => state.myTask.case_status,
+    }),
+    mounted() {
+        this.$store.dispatch('getBeforeComplete',{});
+        this.$store.dispatch('getRegional');
     }
 }
 </script>

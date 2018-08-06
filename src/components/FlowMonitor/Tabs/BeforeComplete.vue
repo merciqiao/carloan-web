@@ -3,24 +3,18 @@
         <el-row>
             <el-col :span="2"><span>进件编号：</span></el-col>
             <el-col :span="4"><el-input size="mini" v-model="bIZINFNO"></el-input></el-col>
-            <el-col :span="2"><span>承租人姓名：</span></el-col>
+            <el-col :span="2"><span>客户姓名：</span></el-col>
             <el-col :span="4"><el-input size="mini" v-model="uSERNAME"></el-input></el-col>
-            <el-col :span="2"><span>任务类型：</span></el-col>
+            <el-col :span="2"><span>任务归属人：</span></el-col>
+            <el-col :span="4"><el-input size="mini" v-model="aSSIGNEE"></el-input></el-col>
+            <el-col :span="2"><span>产品类型：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="cURACTNAME">
-                    <el-option v-for="item in taskType" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
-                </el-select>
-            </el-col>
-            <el-col :span="2"><span>案件状态：</span></el-col>
-            <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="oRDERSTATUS">
-                    <el-option v-for="item in caseStatus" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
+                <el-select placeholder="请选择" size="mini" v-model="pRODUCTTYPE">
+                    <el-option v-for="item in productList" :key="item.productCode" :label="item.productName" :value="item.productCode"></el-option>
                 </el-select>
             </el-col>
         </el-row>
         <el-row class="mt20">
-            <el-col :span="2"><span>客户经理：</span></el-col>
-            <el-col :span="4"><el-input size="mini" v-model="cUSTOMERMANAGER"></el-input></el-col>
             <el-col :span="2"><span>区域：</span></el-col>
             <el-col :span="4">
                 <el-select placeholder="请选择" size="mini" v-model="SECONDLEVELID" @change="changeRegional">
@@ -33,6 +27,40 @@
                     <el-option v-for="item in cityData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-col>
+            <el-col :span="2"><span>任务类型：</span></el-col>
+            <el-col :span="4">
+                <el-select placeholder="请选择" size="mini" v-model="cURACTNAME">
+                    <el-option v-for="item in taskType" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
+                </el-select>
+            </el-col>
+            <el-col :span="2"><span>节点名称：</span></el-col>
+            <el-col :span="4"><el-input size="mini" v-model="ACTIVITYNAME"></el-input></el-col>
+        </el-row>
+        <el-row class="mt20">
+            <el-col :span="2"><span>门店进件时间：</span></el-col>
+            <el-col :span="4">
+                <el-date-picker
+                    v-model="crMsgdate"
+                    type="daterange"
+                    range-separator="-"
+                    unlink-panels
+                    size="mini"
+                    start-placeholde="开始日期"
+                    end-placeholde="结束日期">
+                </el-date-picker>
+            </el-col>
+            <el-col :span="2"><span>信审接单时间：</span></el-col>
+            <el-col :span="4">
+                <el-date-picker
+                    v-model="eNTRYDATE"
+                    type="daterange"
+                    range-separator="-"
+                    unlink-panels
+                    size="mini"
+                    start-placeholde="开始日期"
+                    end-placeholde="结束日期">
+                </el-date-picker>
+            </el-col>
             <el-col :span="6">
                 <div class="ml">
                     <el-button size="mini" @click="resetQuery">重置</el-button>
@@ -42,7 +70,7 @@
         </el-row>
         <div class="table_container">
             <el-table
-                :data="beforeCheckData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
+                :data="beforeCompleteMonitor.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                 border
                 style="width: 100%"
             >
@@ -65,9 +93,8 @@
                     width="100">
                 </el-table-column>
                 <el-table-column
-                    prop="pHONENUMBER"
-                    label="手机号码"
-                    width="130">
+                    prop="oRDERSTATUS"
+                    label="任务当前状态">
                 </el-table-column>
                 <el-table-column
                     prop="pRODUCTTYPE"
@@ -75,24 +102,32 @@
                     width="100">
                 </el-table-column>
                 <el-table-column
+                    prop="aSSIGNEE"
+                    label="任务归属人">
+                </el-table-column>
+                <el-table-column
+                    prop="ACTIVITYNAME"
+                    label="前当节点">
+                </el-table-column>
+                <el-table-column
                     prop="cURACTNAME"
                     label="任务类型">
                 </el-table-column>
                 <el-table-column
-                    prop="oRDERSTATUS"
-                    label="案件状态">
+                    prop="PROINSTANCESTATE"
+                    label="流程状态">
                 </el-table-column>
                 <el-table-column
                     prop="eNTRYORGName"
                     label="进件门店">
                 </el-table-column>
                 <el-table-column
-                    prop="cUSTOMERMANAGER"
-                    label="客户经理">
+                    prop="crMsgdate"
+                    label="门店进件时间">
                 </el-table-column>
                 <el-table-column
-                    prop="eNTRYDATE"
-                    label="进件时间">
+                    prop="crMsgdate"
+                    label="信审接单时间">
                 </el-table-column>
             </el-table>
             <div class="page_container">
@@ -103,36 +138,46 @@
                     :page-sizes="[5,10,15,20]"
                     :page-size="5"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="beforeCheckData.length">
-                </el-pagination>    
+                    :total="beforeCompleteMonitor.length">
+                </el-pagination>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 export default {
     data() {
         return {
             currentPage:1,
             pageSize:5,
-            //查询条件
-            bIZINFNO:'',
-            uSERNAME:'',
-            cURACTNAME:'',
-            oRDERSTATUS:'',
-            cUSTOMERMANAGER:'',
-            eNTRYORGID:'',
-            SECONDLEVELID:''
+            pageNumber:1,
+            /*查询字段*/
+            bIZINFNO:"",
+            uSERNAME:"",
+            aSSIGNEE:"",
+            pRODUCTTYPE:"",
+            SECONDLEVELID:"",
+            eNTRYORGID:"",
+            cURACTNAME:"",
+            ACTIVITYNAME:"",
+            crMsgdate:"",
+            eNTRYDATE:"",
         }
     },
     methods: {
+        handleSizeChange(val) {
+            this.pageSize = val;
+        },
+        handleCurrentChange(val) {
+            this.currentPage = val;
+        },
         handleClick(row) {
-            this.$router.push({ name:'PriceDetail', params: {order_number:row.bIZINFNO, status:1, actName: row.cURACTNAME}});
+            this.$router.push({ name:'PriceDetail', params: {order_number:row.bIZINFNO, status:2, actName: row.cURACTNAME}});
             this.$store.dispatch('getAuditTabs',{
                 biztype: row.bIZTYPE,
                 actName: row.cURACTNAME,
-                statusId: 1
+                statusId: 2
             });
             //保存定价结论的参数
             this.$store.commit('addParamsForPrice',{
@@ -182,45 +227,41 @@ export default {
                  validateState: 0
             });
         },
-        handleSizeChange(val) {
-            this.pageSize = val;
-        },
-        handleCurrentChange(val) {
-            this.currentPage = val;
-        },
-        handleQuery() {
-            let queryObj = {};
-            queryObj.bIZINFNO = this.bIZINFNO;
-            queryObj.uSERNAME = this.uSERNAME;
-            queryObj.cURACTNAME = this.cURACTNAME;
-            queryObj.oRDERSTATUS = this.oRDERSTATUS;
-            queryObj.cUSTOMERMANAGER = this.cUSTOMERMANAGER;
-            queryObj.SECONDLEVELID = this.SECONDLEVELID;
-            queryObj.eNTRYORGID = this.eNTRYORGID;
-            this.$store.dispatch('getBeforeCheck',queryObj);
-        },
         changeRegional(id) {
             this.$store.dispatch('getCity', {
                 id:id
             })
         },
+        handleQuery() {
+            let queryObj = {};
+            queryObj.bIZINFNO = this.bIZINFNO;
+            queryObj.uSERNAME = this.uSERNAME;
+            queryObj.aSSIGNEE = this.aSSIGNEE;
+            queryObj.pRODUCTTYPE = this.pRODUCTTYPE;
+            queryObj.SECONDLEVELID = this.SECONDLEVELID;
+            queryObj.eNTRYORGID = this.eNTRYORGID;
+            queryObj.cURACTNAME = this.cURACTNAME;
+            queryObj.ACTIVITYNAME = this.ACTIVITYNAME;
+            queryObj.eNTRYDATEStr = new Date(this.eNTRYDATE[0]).toLocaleDateString();
+            queryObj.eNTRYDATEEnd = new Date(this.eNTRYDATE[1]).toLocaleDateString();
+            queryObj.crMsgdateStr = new Date(this.crMsgdate[0]).toLocaleDateString();
+            queryObj.crMsgdateEnd = new Date(this.crMsgdate[1]).toLocaleDateString();
+            this.$store.dispatch('getCompletingMonitor',queryObj);
+        },
         resetQuery() {
             this.bIZINFNO = "";
             this.uSERNAME = "";
-            this.cURACTNAME = "";
-            this.oRDERSTATUS = "";
-            this.cUSTOMERMANAGER = "";
-            this.SECONDLEVELID = "";
-            this.eNTRYORGID = "";
+            this.aSSIGNEE = "";
+            this.pRODUCTTYPE = "",
+            this.SECONDLEVELID = "",
+            this.eNTRYORGID = "",
+            this.cURACTNAME = "",
+            this.ACTIVITYNAME = "",
+            this.crMsgdate = "",
+            this.eNTRYDATE =""
         }
     },
     computed: mapState({
-        token: state => state.login.user_token,
-        beforeCheckData: state => state.myTask.beforeCheck_case,
-        regionalData: state => state.myTask.regional_data,
-        cityData: state => state.myTask.city_data,
-        taskType: state => state.myTask.task_type,
-        caseStatus: state => state.myTask.case_status,
         productList(state) {
             let arr = [];
             state.orderInfo.productsList.map((item) => {
@@ -232,19 +273,15 @@ export default {
                 }
             });
             return arr;
-        }
+        },
+        beforeCompleteMonitor: state => state.myTask.beforeComplete_monitor,
+        regionalData: state => state.myTask.regional_data,
+        cityData: state => state.myTask.city_data,
+        taskType: state => state.myTask.task_type,
     }),
-    mounted() {
-        this.$store.dispatch('getBeforeCheck',{});
-        this.$store.dispatch('getRegional');
-        //获取任务类型
-        this.$store.dispatch('getTaskType',{
-            code:"CD_WORKFLOW_BIZTYPE"
-        });
-        //获取案件状态
-        this.$store.dispatch('getCaseStatus',{
-            code:"CD_AUDITE_STATE"
-        })
+    mounted() { 
+        //获取待完成监控
+        this.$store.dispatch('getCompletingMonitor',{});
     }
 }
 </script>

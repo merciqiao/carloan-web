@@ -1,44 +1,84 @@
 <template>
     <div>
-        <el-row>
-            <el-col :span="4" class="pri_label">定价结论：</el-col>
-            <el-col :span="6">
-                <el-select v-model="conclusionValue" placeholder="请选择">
-                    <el-option
-                    v-for="item in conclusionOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-col>
-            <el-col :span="4" class="pri_label">定价金额：</el-col>
-            <el-col :span="6">
-                <el-input v-model="priceValue"></el-input>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-col :span="4" class="pri_label pri_mt">备注信息：</el-col>
-            <el-col :span="20" class="pri_remark">
-                <el-input
-                    type="textarea"
-                    :row="2"
-                    size="mini"
-                    placeholder="请输入备注信息"
-                    v-model="priceRemark">
-                </el-input>
-            </el-col>
-        </el-row>
-        <div>
-            <div class="pri_btn_container">
-                <el-button>保存</el-button>
-                <el-button type="primary">提交</el-button>
-            </div>
-        </div>
+        <el-collapse v-model="ids" v-for="list in conclusionList" :key=list.id v-if="conclusionList.length!==0">
+            <el-collapse-item title="定价结论" :name=list.id class="lrBorder">
+                <el-row class="mt10">
+                    <el-col :span="4" class="pri_label">定价结论：</el-col>
+                    <el-col :span="6">
+                        <el-select v-model="list.pricingConclusion" placeholder="请选择" :disabled="list.isEdit == 'false'">
+                            <el-option value="同意">同意</el-option>
+                            <el-option value="补件">补件</el-option>
+                            <el-option value="拒绝">拒绝</el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="4" class="pri_label">定价金额：</el-col>
+                    <el-col :span="6">
+                        <el-input v-model="list.pricingMoney" :disabled="list.isEdit == 'false'"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="4" class="pri_label pri_mt">备注信息：</el-col>
+                    <el-col :span="20" class="pri_remark">
+                        <el-input
+                            type="textarea"
+                            :row="2"
+                            size="mini"
+                            placeholder="请输入备注信息"
+                            :disabled="list.isEdit == 'false'"
+                            v-model="list.pricingRemarks">
+                        </el-input>
+                    </el-col>
+                </el-row>
+                <div v-if="list.isEdit == 'true'">
+                    <div class="pri_btn_container mb10">
+                        <el-button @click="handleListSave(list,0)">保存</el-button>
+                        <el-button type="primary" @click="handleListSubmit(list,1)">提交</el-button>
+                    </div>
+                </div>
+            </el-collapse-item>
+        </el-collapse>  
+        <el-collapse v-model="valueForCollapse">
+            <el-collapse-item title="定价结论" name="100" class="lrBorder">
+                <el-row class="mt10">
+                    <el-col :span="4" class="pri_label">定价结论：</el-col>
+                    <el-col :span="6">
+                        <el-select v-model="pricingConclusion" placeholder="请选择">
+                            <el-option value="同意">同意</el-option>
+                            <el-option value="补件">补件</el-option>
+                            <el-option value="拒绝">拒绝</el-option>
+                        </el-select>
+                    </el-col>
+                    <el-col :span="4" class="pri_label" v-if="pricingConclusion == '同意'">定价金额：</el-col>
+                    <el-col :span="6" v-if="pricingConclusion == '同意'">
+                        <el-input v-model="pricingMoney"></el-input>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="4" class="pri_label pri_mt">备注信息：</el-col>
+                    <el-col :span="20" class="pri_remark">
+                        <el-input
+                            type="textarea"
+                            :row="2"
+                            size="mini"
+                            placeholder="请输入备注信息"
+                            v-model="pricingRemarks">
+                        </el-input>
+                    </el-col>
+                </el-row>
+                <div>
+                    <div class="pri_btn_container mb10">
+                        <el-button @click="handleSave(0)">保存</el-button>
+                        <el-button type="primary" @click="handleSave(1)">提交</el-button>
+                    </div>
+                </div>
+            </el-collapse-item>
+        </el-collapse>     
     </div>
 </template>
 <script>
+import {mapState} from 'vuex'
 export default{
+    props: ['paramPrice','conclusionList'],
     data() {
         return {
             conclusionOptions: [{
@@ -51,11 +91,59 @@ export default{
                 value: '3',
                 label: '拒绝'
             }],
-            conclusionValue: '',
-            priceValue: 20,
-            priceRemark: '这是备注'
+            pricingConclusion: '',
+            pricingMoney: 0,
+            pricingRemarks: '',
+            valueForCollapse:["100"],
         }
-    }
+    },
+    methods: {
+        handleSave(ope) {
+            let params = Object.assign({},this.paramPrice,{
+                operation: ope,
+                pricingConclusion: this.pricingConclusion,
+                pricingMoney: this.pricingMoney,
+                pricingRemarks: this.pricingRemarks
+            });
+            if(this.pricingConclusion !== "同意") {
+                if(this.pricingRemarks == "") {
+                    this.$message('备注信息不能为空');
+                }else{
+                    this.$store.dispatch('savePriceConclusion',params);
+                }
+            }else{
+                this.$store.dispatch('savePriceConclusion',params);
+            }
+        },
+        handleListSave(list,ope) {
+            let params = Object.assign({},this.paramPrice,{
+                operation: ope,
+                id: list.id,
+                pricingConclusion: list.pricingConclusion,
+                pricingMoney: list.pricingMoney,
+                pricingRemarks: list.pricingRemarks
+            });
+            if(params.pricingConclusion !== '同意') {
+                if(params.pricingRemarks == '') {
+                    this.$message('备注信息不能为空');
+                }else{
+                    this.$store.dispatch('savePriceConclusion',params);
+                }
+            }else{
+                this.$store.dispatch('savePriceConclusion',params);
+            }
+        }
+    },
+    computed:mapState({
+        msg: state => state.orderInfo.order_msg,
+        ids(state) {
+            let ids = [];
+            state.orderInfo.conclusionList.forEach((item) => {
+                ids.push(item.id)
+            });
+            return ids;
+        }
+    })
 }
 </script>
 <style lang="less">
@@ -77,6 +165,16 @@ export default{
     width:170px;
     float:right;
     margin-top: 30px;
+}
+.lrBorder{
+    border-left:1px solid #ebeef5;
+    border-right: 1px solid #ebeef5;
+}
+.mt10{
+    margin-top: 10px;
+}
+.mb10{
+    margin-bottom: 10px;
 }
 </style>
 

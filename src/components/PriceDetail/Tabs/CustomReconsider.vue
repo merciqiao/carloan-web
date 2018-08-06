@@ -3,7 +3,7 @@
         <el-collapse v-model="rec_col_val">
             <el-collapse-item title="客户复议" name="1">
                 <el-table
-                    :data="reconsiderData"
+                    :data="fuyi_data"
                     border
                     style="width: 100%">
                     <el-table-column
@@ -12,27 +12,19 @@
                         width="50">
                     </el-table-column>
                     <el-table-column
-                        prop="userName"
-                        label="客户姓名">
-                    </el-table-column>
-                    <el-table-column
-                        prop="idCard"
-                        label="证件号码">
-                    </el-table-column>
-                    <el-table-column
-                        prop="periodsNo"
+                        prop="fuyiPeriod"
                         label="复议期数">
                     </el-table-column>
                     <el-table-column
-                        prop="periodsAmount"
+                        prop="fuyiAmount"
                         label="复议金额">
                     </el-table-column>
                     <el-table-column
-                        prop="periodsDate"
+                        prop="creationTime"
                         label="复议日期">
                     </el-table-column>
                     <el-table-column
-                        prop="remark"
+                        prop="fuyiRemarks"
                         label="备注">
                     </el-table-column>
                 </el-table>
@@ -41,6 +33,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
@@ -61,7 +54,18 @@ export default {
                 remark:'####'
             }]
         }
-    }
+    },
+    computed: mapState({
+        token: state => state.login.user_token,
+        fuyi_data: state => state.orderInfo.fuyiList
+    }),
+    mounted() {
+        this.$store.dispatch('getFuyi',{
+            headers: {'token': this.token},
+            params: {ordernum: this.orderNum}
+        })
+    },
+    props: ["orderNum"]
 }
 </script>
 

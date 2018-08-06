@@ -2,23 +2,23 @@
     <div class="p20">
         <el-row>
             <el-col :span="2"><span>进件编号：</span></el-col>
-            <el-col :span="4"><el-input size="mini"></el-input></el-col>
+            <el-col :span="4"><el-input size="mini" v-model="bIZINFNO"></el-input></el-col>
             <el-col :span="2"><span>产品类型：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="productValue">
-                    <el-option v-for="item in productType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select placeholder="请选择" size="mini" v-model="pRODUCTTYPE">
+                    <el-option v-for="item in productList" :key="item.productCode" :label="item.productName" :value="item.productCode"></el-option>
                 </el-select>
             </el-col>
             <el-col :span="2"><span>任务类型：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="taskValue">
-                    <el-option v-for="item in taskType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select placeholder="请选择" size="mini" v-model="cURACTNAME">
+                    <el-option v-for="item in taskType" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
                 </el-select>
             </el-col>
             <el-col :span="2"><span>案件状态：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="statusValue">
-                    <el-option v-for="item in taskStatus" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                <el-select placeholder="请选择" size="mini" v-model="oRDERSTATUS">
+                    <el-option v-for="item in caseStatus" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
                 </el-select>
             </el-col>
         </el-row>
@@ -26,7 +26,7 @@
             <el-col :span="2"><span>信审接单时间：</span></el-col>
             <el-col :span="4">
                 <el-date-picker
-                    v-model="receiveDate"
+                    v-model="eNTRYDATE"
                     type="daterange"
                     range-separator="-"
                     unlink-panels
@@ -38,7 +38,7 @@
             <el-col :span="2"><span>办结时间：</span></el-col>
             <el-col :span="4">
                 <el-date-picker
-                    v-model="finishDate"
+                    v-model="eNDDATE"
                     type="daterange"
                     range-separator="-"
                     unlink-panels
@@ -50,45 +50,65 @@
             <el-col :span="6">
                 <div class="ml">
                     <el-button size="mini">重置</el-button>
-                    <el-button size="mini" type="primary">查询</el-button>
+                    <el-button size="mini" type="primary" @click="handleQuery">查询</el-button>
                 </div>
             </el-col>
         </el-row>
         <div class="table_container">
             <el-table
-                :data="beforeCheckData.slice(0,5)"
+                :data="haveCompletedData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                 border
                 style="width: 100%"
             >
                 <el-table-column
-                    prop="id"
+                    type="index"
                     label="序号"
                     width="50">
                 </el-table-column>
                 <el-table-column
-                    prop="number"
+                    prop="bIZINFNO"
                     label="进件编号"
                     width="210">
+                    <template slot-scope="scope">
+                        <el-button @click="handleClick(scope.row)" type="text" size="mini">{{scope.row.bIZINFNO}}</el-button>
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="type"
-                    label="产品类型">
+                    prop="uSERNAME"
+                    label="客户姓名"
+                    width="100">
                 </el-table-column>
                 <el-table-column
-                    prop="approvalResult"
-                    label="审批结果">
-                </el-table-column>
-                <el-table-column
-                    prop="taskType"
+                    prop="cURACTNAME"
                     label="任务类型">
                 </el-table-column>
                 <el-table-column
-                    prop="jdTime"
-                    label="信审接单时间">
+                    prop="cURACTNAME"
+                    label="产品类型">
                 </el-table-column>
                 <el-table-column
-                    prop="bjTime"
-                    label="办结时间">
+                    prop="oRDERSTATUS"
+                    label="审批结果">
+                </el-table-column>
+                <el-table-column
+                    prop="oRDERSTATUS"
+                    label="案件状态">
+                </el-table-column>
+                <el-table-column
+                    prop="eNTRYDATE"
+                    label="进件时间">
+                </el-table-column>
+                <el-table-column
+                    prop="eNTRYDATE"
+                    label="信审/定件接单时间">
+                </el-table-column>
+                <el-table-column
+                    prop="eNTRYORGName"
+                    label="进件门店">
+                </el-table-column>
+                <el-table-column
+                    prop="cUSTOMERMANAGER"
+                    label="客户经理">
                 </el-table-column>
             </el-table>
             <div class="page_container">
@@ -99,137 +119,129 @@
                     :page-sizes="[5,10,15,20]"
                     :page-size="5"
                     layout="total, sizes, prev, pager, next, jumper"
-                    :total="beforeCheckData.length">
-                </el-pagination>
+                    :total="haveCompletedData.length">
+                </el-pagination>    
             </div>
         </div>
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
             currentPage:1,
             pageSize:5,
-            pageNumber:1,
-            taskType: [{
-                value:'1',
-                label: '定价审批'
-            },{
-                value:'2',
-                label: '车贷审批'
-            },{
-                value:'3',
-                label: '车贷复议审批'
-            }],
-            taskStatus: [{
-                value:'1',
-                label: '状态一'
-            },{
-                value:'2',
-                label: '状态二'
-            },{
-                value:'3',
-                label: '状态三'
-            }],
-            productType: [{
-                value:'1',
-                label:'产品状态一'
-            },{
-                value:'2',
-                label:'产品状态二'
-            },{
-                value:'3',
-                label:'产品状态三'
-            }],
-            taskValue: '',
-            statusValue: '',
             provinceValue: '',
             cityValue: '',
-            productValue: '',
-            receiveDate: '',
-            finishDate: '',
-            beforeCheckData: [{
-                id:'1',
-                number:'BJPHYB2017060800026XXX',
-                type: '鸿途融',
-                approvalResult:'同意',
-                taskType:'信审审批',
-                jdTime:'2017-06-07 12:04:33',
-                bjTime:'2017-06-07 14:04:33'
-            },{
-                id:'2',
-                number:'BJPHYB2017060800026XXX',
-                type: '鸿途融',
-                approvalResult:'同意',
-                taskType:'信审审批',
-                jdTime:'2017-06-07 12:04:33',
-                bjTime:'2017-06-07 14:04:33'
-            },{
-                id:'3',
-                number:'BJPHYB2017060800026XXX',
-                type: '鸿途融',
-                approvalResult:'同意',
-                taskType:'信审审批',
-                jdTime:'2017-06-07 12:04:33',
-                bjTime:'2017-06-07 14:04:33'
-            },{
-                id:'4',
-                number:'BJPHYB2017060800026XXX',
-                type: '鸿途融',
-                approvalResult:'同意',
-                taskType:'信审审批',
-                jdTime:'2017-06-07 12:04:33',
-                bjTime:'2017-06-07 14:04:33'
-            },{
-                id:'5',
-                number:'BJPHYB2017060800026XXX',
-                type: '鸿途融',
-                approvalResult:'同意',
-                taskType:'信审审批',
-                jdTime:'2017-06-07 12:04:33',
-                bjTime:'2017-06-07 14:04:33'
-            },{
-                id:'6',
-                number:'BJPHYB2017060800026XXX',
-                type: '鸿途融',
-                approvalResult:'同意',
-                taskType:'信审审批',
-                jdTime:'2017-06-07 12:04:33',
-                bjTime:'2017-06-07 14:04:33'
-            },{
-                id:'7',
-                number:'BJPHYB2017060800026XXX',
-                type: '鸿途融',
-                approvalResult:'同意',
-                taskType:'信审审批',
-                jdTime:'2017-06-07 12:04:33',
-                bjTime:'2017-06-07 14:04:33'
-            },{
-                id:'8',
-                number:'BJPHYB2017060800026XXX',
-                type: '鸿途融',
-                approvalResult:'同意',
-                taskType:'信审审批',
-                jdTime:'2017-06-07 12:04:33',
-                bjTime:'2017-06-07 14:04:33'
-            }],
-            displayTableData: [].concat(this.beforeCheckData),
-            //查询modal
+            //查询条件
+            bIZINFNO: '',
+            pRODUCTTYPE:'',
+            cURACTNAME:'',
+            oRDERSTATUS:'',
+            eNTRYDATE:'',
+            eNDDATE:''
         }
     },
     methods: {
+        handleClick(row) {
+            this.$router.push({ name:'PriceDetail', params: {order_number:row.bIZINFNO, status:2, actName:row.cURACTNAME}});
+            this.$store.dispatch('getAuditTabs',{
+                biztype: row.bIZTYPE,
+                actName: row.cURACTNAME,
+                statusId: 2
+            });
+            //保存定价结论的参数
+            this.$store.commit('addParamsForPrice',{
+                actName: row.cURACTNAME,
+                auditState: "",
+                bizType: row.bIZTYPE,
+                carInfoId: "",
+                creationTime: "",
+                currentApprover: "",
+                id: 0,
+                orderNumber: row.bIZINFNO,
+                pricingProductType: "",
+                processId: row.cUREXEID,
+                staTus: "",
+                transition: "",
+                updateTime: ""
+            });
+            //保存审核意见的参数
+            this.$store.commit('addParamsForAudit',{
+                auditState:"",
+                bizType: row.bIZTYPE,
+                carInfoId:"",
+                creationTime:"",
+                currentApprover:"",
+                currentExaminationPost:row.cURACTNAME,
+                id:0,
+                orderNumber: row.bIZINFNO,
+                processId: row.cUREXEID,
+                productType: row.pRODUCTTYPE,
+                staTus:"",
+                updateTime:""
+            });
+            //保存反欺诈查询的参数
+            this.$store.commit('addParamsForAnit', {
+                 approver: "",
+                 auditState: "",
+                 carInfoId: "",
+                 createTime: "",
+                 ext1: "",
+                 ext2: "",
+                 id: 0,
+                 orderNumber: row.bIZINFNO,
+                 processId: row.cUREXEID, 
+                 staTus: "",
+                 subOption: "",
+                 updateTime: "",
+                 validateState: 0
+            });
+        },
         handleSizeChange(val) {
             this.pageSize = val;
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
-            let startRow = (val - 1) * this.pageSize + 1;
-            let endRow = val * this.pageSize;
-            this.beforeCheckData = this.beforeCheckData.slice(startRow,endRow);
-            console.log(this.displayTableData.length);
-            console.log(this.receiveDate);
+            this.currentPage = val;
+        },
+        handleQuery() {
+            let queryObj = {};
+            queryObj.bIZINFNO = this.bIZINFNO;
+            queryObj.pRODUCTTYPE = this.pRODUCTTYPE;
+            queryObj.cURACTNAME = this.cURACTNAME;
+            queryObj.oRDERSTATUS = this.oRDERSTATUS;
+            queryObj.eNTRYDATEStr = new Date(this.eNTRYDATE[0]).toLocaleDateString();
+            queryObj.eNTRYDATEEnd = new Date(this.eNTRYDATE[1]).toLocaleDateString();
+            queryObj.eNDDATEStr = new Date(this.eNDDATE[0]).toLocaleDateString();
+            queryObj.eNDDATEEnd = new Date(this.eNDDATE[1]).toLocaleDateString();
+            this.$store.dispatch('getHaveCompleted',queryObj);
         }
+    },
+    computed:mapState({
+        token: state => state.login.user_token,
+        haveCompletedData: state => state.myTask.haveCompleted_case,
+        taskType: state => state.myTask.task_type,
+        caseStatus: state => state.myTask.case_status,
+        productList(state) {
+            let arr = [];
+            state.orderInfo.productsList.map((item) => {
+                let obj = {};
+                if(arr.indexOf(item.productName) == -1) {
+                    obj.productName = item.productName;
+                    obj.productCode = item.productCode;
+                    arr.push(obj);
+                }
+            });
+            return arr;
+        },
+    }),
+    mounted() {
+        this.$store.dispatch('getHaveCompleted',{});
+        //获取产品信息
+        this.$store.dispatch('getProducts',{
+          headers: {'token': this.token},
+        }); 
     }
 }
 </script>

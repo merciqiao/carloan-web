@@ -1,0 +1,463 @@
+vue说明文档
+
+1. 安装vue-cli: npm install vue-cli -g
+2. 新建项目：vue init webpack 项目名
+3. 安装element-ui: npm install element-ui --save
+4. 安装按需引入：npm install babel-plugin-component -D(--save-dev的简定)
+5. babelrc的配置如下：
+    {
+  "presets": [
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
+      }
+    }],
+    "stage-2"
+  ],
+  "plugins": ["transform-vue-jsx", "transform-runtime",
+    ["component", {
+      "libraryName":"element-ui",
+      "styleLibraryName":"theme-chalk"
+    }
+  ]
+  ]
+}
+6. 引用less
+先npm install less less-loader --save-dev
+保存less路径到webpack.base.conf.js中：
+resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
+      'less': resolve('src/assets/less')  //在引入less的时候就不需要引全部路径，只需要 import 'less/base.less'即可。
+    }
+  },
+
+7. 关闭eslint: 注释掉webpack.base.conf.js中：//...(config.dev.useEslint ? [createLintingRule()] : []),
+8. vue背景设置繁琐一些，具体参考login/index.vue, img正常写。
+9. slot的用法：用在col的父子组件分开的情况下很有用处，子组件定义slot,父组件拿来替换即可。
+10. vuex的使用：在src下新建文件夹store，以及下面的文件。
+
+ index.js      // 文件都会汇聚到这个地方来,也是创建store对象的地方,就像store的入口一样
+
+actions.js      //存放vuex的核心处理函数
+
+getters.js      //工具接口为了方便构建全局state自定义方法
+
+mutations.js      //改变store中各种状态的地方
+
+rootState.js       //我参考一个大神的做法创建rootState.js保存顶层的数据
+
+将store的建立放在index.js中，getters是属于store的计算属性，可以在定义store的时候定义，如下：
+
+const store = new Vuex.Store({
+  state: {
+    todos: [
+      { id: 1, text: '...', done: true },
+      { id: 2, text: '...', done: false }
+    ]
+  },
+  getters: {
+    doneTodos: state => {
+      return state.todos.filter(todo => todo.done)
+    }
+  }
+})
+
+用的时候直接引用，store.getters.doneTodos.
+Getter也可以接受其他getter作为第二个参数：
+
+getters: {
+  // ...
+  doneTodosCount: (state, getters) => {
+    return getters.doneTodos.length
+  }
+}
+
+在组件中使用方法：
+
+computed: {
+  doneTodosCount() {
+    return this.$store.getters.doneTodosCount
+  }
+}
+
+通过方法访问，会常用到，在数组里面查询用：
+
+getters: {
+  //...
+  getTodoById: (state) => (id) => {
+    return state.todos.find(todo => todo.id === id)
+  }
+}
+
+store.getters.getTodoById(2) // -> { id:2, text: '...', done: false }
+
+只是这个方法不会缓存结果 
+
+mapGetters。。。是将store中的getter映射到局部计算属性。。。这步是为了在页面中使用？
+
+import { mapGetters } from 'vuex'
+
+export default {
+  // ...
+  computed: {
+  // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters([
+      'doneTodosCount',
+      'anotherGetter',
+      // ...
+    ])
+  }
+}
+
+如果你想将一个 getter 属性另取一个名字，使用对象形式
+
+mapGetters({
+  // 把 `this.doneCount` 映射为 `this.$store.getters.doneTodosCount`
+  doneCount: 'doneTodosCount'
+})
+
+Mutation
+
+它有点类似react的reducer...纯函数
+
+Vuex 中的 mutation 非常类似于事件：每个 mutation 都有一个字符串的 事件类型 (type) 和 一个 回调函数 (handler)。这个回调函数就是我们实际进行状态更改的地方，并且它会接受 state 作为第一个参数：
+
+如果把现有的vue-cli项目迁移到git上会出现css的错误，可以在根目录下新建 postcss.config.js文件，然后在里面输入以下代码：
+
+module.exports = {
+    plugins: {
+        'autoprefixer': {browsers: 'last 5 version'}
+    }
+}
+迁移过程中还有一个问题是elementui样式出不来，需要在main.js中额外引入css 文件并且在webpack.base.conf.js的loader里面加这个：
+
+{
+        test: /\.css$/,
+        include: [
+          /src/,
+          '/node_modules/element-ui/lib'
+        ],
+        loader: 'style-loader!css-loader'
+      }
+
+main.js中加这句：import 'element-ui/lib/theme-chalk/index.css'
+
+#####vue中在标签里的属性有时有冒号，有时没有如下解释：
+
+加冒号的，说明后面的是一个变量或者表达式；没加冒号的后面就是对应的字符串字面量！
+
+<el-radio-group v-model="handle">
+
+                    <el-radio :label="true">打开</el-radio>
+
+                    <el-radio :label="false">关闭</el-radio>
+
+</el-radio-group>
+
+输出：true 或 false   值是Boolean类型
+
+<el-radio-group v-model="handle">
+
+                    <el-radio label="true">打开</el-radio>
+
+                    <el-radio label="false">关闭</el-radio>
+
+</el-radio-group>
+
+输出：”true" 或 “false”  值是String类型
+
+
+/////如何设置变量样式
+
+在data()里面加对象，如：
+
+data() {
+    return {
+      activeName: 'beforeCheck',
+      tabHeight: {
+          height: document.documentElement.clientHeight - 80 + "px",
+      }
+    }
+  },
+
+tabHeight就是class名
+然后在标签中引用 class="tabHeight" :style="tabHeight"
+
+####vue的computed..没怎么用过。。
+
+//////vue的交互及数据流
+1. 在根目录下新建store文件，用来存vuex的数据
+2. 新建 index.js
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+import * as actions from './actions'
+import * as mutations from './mutations'
+import * as getters from './getters'
+import state from './rootState';
+
+Vue.use(Vuex)
+const store = new Vuex.Store({
+    state,
+    getters,
+    actions,
+    mutations
+})
+export default store;
+
+3. 在main.js引入 import store from './store/index', new Vue中加store
+
+4. 暂定一个页面一个modules, 如果请求的接口一样的话就放在一起。。
+
+5. 加了module之后使用方法由 $store.state.show改为 $store.state.login.show，具体在组件中使用为<div>{{this.$store.state.login.show}}</div>
+
+6. 定义mutation要在相应store文件中去定义，改变state的值，注意mutation是不分组件的，要执行mutation,方法：@click="$store.commit('switch_login')"，点击一次执行一次
+
+7. actions是为了同时执行多个修改state的mutation的情况。
+context拥有与$store相同的属性和方法
+store有 commit, dispatch等方法
+
+推荐异步操作放在action中
+
+8. getters就是通过state计算得到的值，可以直接当属性来用：<span>{{this.$store.getters.not_show}}</span>
+
+9. 写法简化：
+mapState:
+
+先在组件里面引入 mapState: import { mapState } from 'vuex'
+在computed里面使用：computed里面不需要大括号，直接加mapState, 如果需要加其他内部属性，可以用扩展符的形式。在组件中可以直接 {{this.show}}来代替{{this.$store.state.login.show}}了。
+
+ computed:mapState({
+          show: state => state.login.show
+      })
+  , 
+
+10. 交互用axios，安装：npm install axios --save-dev
+
+11. 注意 vue标签会用到带冒号的属性，，如：
+<el-alert :title="this.msg"></el-alert>，不加冒号不出来结果 。。。带冒号说明后面是变量，或者表达式。。这个情况就属于变量，而字符串形式的不需要加冒号。
+
+12. 不要在v-if上面定义样式标签。。不存在
+
+13. 路由。。。如果类似a标签那种跳转，方法如下：
+
+<router-link id="logo" to="/home/first">跳转</router-link>
+
+通过点击跳转：
+
+<button class="login" @click="goFirst">登录</button>
+
+methods: {
+  goFirst: function() {
+    this.$router.push({path:'/home/first'})  //如果需要传参数，就用router里面对应的name获取页面，params传递参数, 写成： this.$router.push({ name:'PriceDetail', params: {order_number:row.bIZINFNO}}), 目标页获取用 this.$route.params.order_number
+  }
+}
+
+前提是需要在router的文件中设置mode为history
+
+登录成功跳转可以用上边的方法
+
+进其他页面前需验证是否登录这块主要看 router里面的index.js, 加一个验证
+
+///////vue响应式的改变数组或者对象的方法：
+
+数组如果只改变其中一项可以用 splice, this.items.splice(indexOfItem,1,newValue)
+对象可以用 $set: this.$set(this.tabHeight, 'color','red');
+
+vm.userProfile = Object.assign({}, vm.userProfile, {
+  age: 27,
+  favoriteColor: 'Vue Green'
+})
+
+////////通过props传过来的数据如果在data里面获取不到，可以在watch下面监听，具体方法如下：
+
+watch: {
+        carNumMatch(val) {   //carNumMatch就是props里面的值，它有变化的话，val就是变化后的值，把它给 data里面定义好的data1属性。
+            this.data1 = val
+        }
+    },
+
+分页通用方法：<el-table
+                    :data="carFraMatch.slice((currentPage1-1)*pageSize1,currentPage1*pageSize1)"
+                    border
+                    style="width: 100%">
+
+
+
+区域接口：http://172.24.133.70:8761/regional
+
+城市接口：http://172.24.133.70:8761/regional/1/city   //这里面的1是取自省份里面的id...
+
+@普诚研发-李可 CAR20180613134738719581173 定价审核中
+CAR20180613134738719581172 定价审核同意，信审进件审核中
+
+//流程轨迹标签
+public static final String logInfoObj="logInfoObj";
+//历史匹配
+public static final String matchInfoObj="matchInfoObj";
+//车辆信息
+public static final String carInfoObj="carInfoObj";
+//客户订单信息
+public static final String customerInfoObj="customerInfoObj";
+//电核网核
+public static final String  surveyInfoObj="surveyInfoObj";
+//审核意见
+public static final String  auditInfoObj="auditInfoObj";
+//定价结论
+public static final String  auditCarPriceObj="auditCarPriceObj";
+//反欺诈项
+public static final String  antiFraudObj="antiFraudObj";
+//客户复议
+custorReconsiderObj
+
+
+/**主键id*/
+@ApiModelProperty(value="主键id")
+private java.lang.Long id;
+
+/**订单编号*/
+@ApiModelProperty(value="订单编号")
+private java.lang.String orderNumber;
+
+/**定价产品类型*/
+@ApiModelProperty(value="定价产品类型")
+private java.lang.String pricingProductType;
+
+/**定价结论*/
+@ApiModelProperty(value="定价结论")
+private java.lang.String pricingConclusion;
+
+/**定价金额*/
+@ApiModelProperty(value="定价金额")
+private java.lang.String pricingMoney;
+
+/**定价备注信息*/
+@ApiModelProperty(value="定价备注信息")
+private java.lang.String pricingRemarks;
+
+/**当前审批人*/
+@ApiModelProperty(value="当前审批人")
+private java.lang.String currentApprover;
+
+/**状态：2100 补件，2200 同意 2700 拒绝*/
+@ApiModelProperty(value="状态：2100 补件，2200 同意 2700 拒绝")
+private java.lang.String auditState;
+
+/**创建时间*/
+@ApiModelProperty(value="创建时间")
+private java.util.Date creationTime;
+
+/**修改时间*/
+@ApiModelProperty(value="修改时间")
+private java.util.Date updateTime;
+
+/**状态：301门店补件，304审核同意，305审核拒绝*/
+@ApiModelProperty(value="状态：301门店补件，304审核同意，305审核拒绝")
+private java.lang.String staTus;
+
+/**CAR_INFO_ID*/
+@ApiModelProperty(value="CAR_INFO_ID")
+private java.lang.Long carInfoId;
+/**流程类型*/
+@ApiModelProperty(value="流程类型")
+private java.lang.Integer bizType;
+
+/**流程实例ID*/
+@ApiModelProperty(value="流程实例ID")
+private java.lang.String processId;
+//任务当前节点
+private String actName;
+//操作0保存 1提交 save/submit
+private Short operation;
+//流程流转方向
+private String transition;
+
+
+//////////如果获取的数据需要改动，就在computed里面做成计算属性，具体写法如下，这个是参照Vuex的官网，mapState里面
+
+computed: mapState({
+        beforeCheckData: state => state.myTask.beforeCheck_case,
+        regionalData: state => state.myTask.regional_data,
+        cityData: state => state.myTask.city_data,
+        newData(state) {
+            return state.myTask.beforeCheck_case.concat(this.addData)
+        }
+    }),
+
+
+//////////自动执行click事件，可以在created()里面操作，方法如下：
+
+  created() {
+      this.chooseType();
+  },
+
+//////
+
+{
+  "approvalPeriod": "string",  期数
+  "auditState": "string",     
+  "bizType": 0, 
+  "carInfoId": 0,
+  "contractAmount": "string",  合同金额
+  "creationTime": "2018-07-24T01:11:51.937Z",
+  "currentApprover": "string",
+  "currentExaminationPost": "string", 
+  "examineRemarks": "string",   备注
+  "id": 0,  
+  "ifTransfer": "string",   是否同意过户
+  "operation": 0,           操作
+  "orderNumber": "string",
+  "processId": "string",
+  "productSeries": "string",  建议产品名称
+  "productType": "string",    建议产品code
+  "repaymentMethod": "string",   还款方式
+  "staTus": "string",   
+  "transition": "string",    初审结论
+  "updateTime": "2018-07-24T01:11:51.937Z",
+  "innerRemarks": "string"   内部备注
+}
+
+///////用在去重挺好用的：
+
+productList(state) {
+            let arr = [];
+            state.orderInfo.productsList.map((item) => {
+                let obj = {};
+                if(arr.indexOf(item.productName) == -1) {
+                    obj.productName = item.productName;
+                    obj.productCode = item.productCode;
+                    arr.push(obj);
+                }
+            });
+            return arr;
+        } 
+
+///////select选择相应的label:
+
+ selectProduct(value) {
+            let obj = {};
+            obj = this.productList.find((item) => {
+                return item.productCode === value;
+            });
+            console.log(obj.productName);
+            this.$store.dispatch('getProductById',{
+                headers: {'token': this.token},
+                params: {productCode: value}
+            })
+        },
+
+
+///////思路：在v-for循环中没法执行一个事件的时候可以定义一个button按钮使它的display为none，然后在created()自动执行该按钮定义的事件，可解决此问题。。
+
+///////axios中的get参数需要token, 而post不需要
+
+
+"fraudConclusion": "string",
+operation
+"remarks": "string",
+mainOption: "",
+
