@@ -1,6 +1,6 @@
 <template> 
 <div id="dhwh">
-      <el-button size="mini"  @click="handleAdd">新增</el-button>  
+      <el-button size="mini" type="success" icon="el-icon-circle-plus-outline"  @click="handleAdd">新增</el-button>  
                              
         <el-table :data="resultData" size="mini"  highlight-current-row border  style="width: 100%;height:500px;padding-bottom: 0px;text-align:center;" class="el-tb-edit"  ref="demoTable"  v-loading="listLoading">
             <el-table-column type="index" width="50">
@@ -65,8 +65,7 @@
 				<el-form-item label="姓名" prop="userName">
 					<el-input v-model="editForm.userName" auto-complete="off"></el-input>
 				</el-form-item>
-        <el-form-item label="电话类型" prop="contactType">
-					<!-- <el-input v-model="editForm.contactType" auto-complete="off"></el-input> -->
+        <el-form-item label="电话类型" prop="contactType">			
           <el-select v-model="editForm.contactType" placeholder="请选择">
                   <el-option  v-for="item in options"   :key="item.value"  :label="item.label" :value="item.value"> </el-option>
             </el-select>
@@ -191,6 +190,7 @@ export default {
       addFormVisible: false,
       //添加按钮Loading加载
       addLoading: false,
+      //电话类型下拉框
       options: [{
           value: '工作电话',
           label: '工作电话'
