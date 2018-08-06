@@ -31,7 +31,7 @@
         UEDITOR_HOME_URL: URL
 
         // 服务器统一请求接口路径
-        , serverUrl: "http://10.0.130.80:8096/AliYunOss-api/upload"
+        , serverUrl: "http://172.24.132.107:8096/AliYunOss-api/upload"
 
         //工具栏上的所有的功能按钮和下拉框，可以在new编辑器的实例时选择自己需要的重新定义
         //, toolbars: [[     
