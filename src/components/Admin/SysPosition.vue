@@ -1,5 +1,9 @@
 <template>  
-     <section> 
+    <div>
+      <tool-bar></tool-bar>
+      <dash-board>
+        <div slot="content">
+          <section> 
   <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">                  
@@ -112,9 +116,19 @@
                 </div>
               </el-dialog>
          </section> 
+        </div>
+      </dash-board>
+    </div>
+     
  </template>
 <script>
+import ToolBar from '../Common/Toolbar/index'
+import DashBoard from '../Common/Dashboard/index'
 export default {
+  components: {
+    DashBoard,
+    ToolBar
+  },
   data() {
     return {
       //搜索区域参数

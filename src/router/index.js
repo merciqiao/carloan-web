@@ -51,6 +51,15 @@ const router = new Router({
         requireAuth: true
       }
     },
+    {
+      path: '/sysPosition',
+      name: 'SysPosition',
+      component: SysPosition,
+      meta: {
+        title: '',
+        requireAuth: true
+      }
+    },
   ],
   mode: 'history'
 });
