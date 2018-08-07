@@ -6,6 +6,11 @@ import PriceDetail from '@/components/PriceDetail/index'
 import FlowMonitor from '@/components/FlowMonitor/index'
 import WorkPiece from '@/components/WorkPiece/index'
 import SysPosition from '@/components/Admin/SysPosition'
+import SysRole from '@/components/Admin/SysRole'
+import SysResource from '@/components/Admin/SysResource'
+import SysRoleMap from '@/components/Admin/SysRoleMap'
+import SysAcl from '@/components/Admin/SysAcl'
+import SysMenu from '@/components/Admin/SysMenu'
 Vue.use(Router)
 
 const router = new Router({
@@ -55,6 +60,51 @@ const router = new Router({
       path: '/sysPosition',
       name: 'SysPosition',
       component: SysPosition,
+      meta: {
+        title: '',
+        requireAuth: true
+      }
+    },
+    {
+      path: '/SysRole',
+      name: 'SysRole',
+      component: SysRole,
+      meta: {
+        title: '',
+        requireAuth: true
+      }
+    },
+    {
+      path: '/SysRoleMap',
+      name: 'SysRoleMap',
+      component: SysRoleMap,
+      meta: {
+        title: '',
+        requireAuth: true
+      }
+    },
+    {
+      path: '/SysResource',
+      name: 'SysResource',
+      component: SysResource,
+      meta: {
+        title: '',
+        requireAuth: true
+      }
+    },
+    {
+      path: '/SysAcl',
+      name: 'SysAcl',
+      component: SysAcl,
+      meta: {
+        title: '',
+        requireAuth: true
+      }
+    },
+    {
+      path: '/SysMenu',
+      name: 'SysMenu',
+      component: SysMenu,
       meta: {
         title: '',
         requireAuth: true
