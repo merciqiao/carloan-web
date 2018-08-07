@@ -5,7 +5,7 @@ import PricePost from '@/components/PricePost/index'
 import PriceDetail from '@/components/PriceDetail/index'
 import FlowMonitor from '@/components/FlowMonitor/index'
 import WorkPiece from '@/components/WorkPiece/index'
-
+import SysPosition from '@/components/Admin/SysPosition'
 Vue.use(Router)
 
 const router = new Router({

@@ -21,6 +21,19 @@
                     </template>
                     <el-menu-item index="/flowmonitor">业务流程监控</el-menu-item>
                 </el-submenu>
+                <el-submenu index="3">
+                 <template slot="title">
+                    <i class="el-icon-document"></i>
+                    <span>系统管理</span>
+                    </template>                
+                    <el-submenu index="3-1">
+                    <template slot="title">机构管理</template>
+                     <el-menu-item index="/sysPosition">岗位管理</el-menu-item>
+                    <el-menu-item index="">机构管理</el-menu-item>
+                     <el-menu-item index="">用户管理</el-menu-item>
+                    </el-submenu>
+                </el-submenu>
+                
             </el-menu>
         </el-col>
         <el-col :span="20">
