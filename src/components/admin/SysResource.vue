@@ -167,7 +167,7 @@
         param.append("orgid", node.data.id);
           this.$ajax({
             method: "post",
-            url: "/api/sysorg-api/deleteSysOrg",
+            url: "/api/sysResource_api/deleteResourceByID",
             data: param
           }).then(res => {
             this.$message({
