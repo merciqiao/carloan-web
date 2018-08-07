@@ -11,6 +11,8 @@ import App from './App'
 import router from './router'
 import 'less/base.less'
 import store from './store'
+import axios from 'axios'
+Vue.prototype.$ajax=axios
 
 
 Vue.use(ElementUI)
