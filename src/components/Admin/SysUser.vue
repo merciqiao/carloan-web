@@ -72,7 +72,7 @@
             </el-table-column>    
              <!-- <el-table-column prop="isLocked" label="是否锁定" :formatter="formatLocked" sortable>
             </el-table-column>     -->            
-              <el-table-column prop="" label="操作" width="150">
+              <el-table-column  fixed="right" label="操作" width="150">
                <template slot-scope="scope">				         
                     			   	<el-button type="primary" plain size="small" @click="handleRole(scope.$index,scope.row)">角色</el-button>  
                       	<el-button size="small" @click="handleEdit(scope.$index,scope.row)">编辑</el-button>	                          
