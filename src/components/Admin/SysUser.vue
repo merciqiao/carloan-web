@@ -1075,6 +1075,10 @@ export default {
     handleEdit: function(index, row) {
       this.editFormVisible = true;
       this.editForm = Object.assign({}, row);
+      if(row.positionname==null)
+      {
+         this.editForm.positionname="选择岗位";
+      }
     }, //编辑
     editSubmit: function() {
       if (this.checked == true) {
