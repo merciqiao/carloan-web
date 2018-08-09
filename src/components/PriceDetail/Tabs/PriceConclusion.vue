@@ -37,7 +37,7 @@
                 </div>
             </el-collapse-item>
         </el-collapse>  
-        <el-collapse v-model="valueForCollapse">
+        <el-collapse v-model="valueForCollapse" v-if="isEdit">
             <el-collapse-item title="定价结论" name="100" class="lrBorder">
                 <el-row class="mt10">
                     <el-col :span="4" class="pri_label">定价结论：</el-col>
@@ -95,6 +95,7 @@ export default{
             pricingMoney: 0,
             pricingRemarks: '',
             valueForCollapse:["100"],
+            isEdit: true
         }
     },
     methods: {
@@ -116,6 +117,7 @@ export default{
             }
         },
         handleListSave(list,ope) {
+            this.isEdit = false;
             let params = Object.assign({},this.paramPrice,{
                 operation: ope,
                 id: list.id,

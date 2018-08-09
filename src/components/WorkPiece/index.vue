@@ -224,12 +224,7 @@ export default {
   },
   methods: {
       handleClick(row) {
-        this.$router.push({ name:'PriceDetail', params: {order_number:row.orderNumber, status:2, actName: ""}});
-        this.$store.dispatch('getAuditTabs',{
-            biztype: "3000",
-            actName: "",
-            statusId: 2
-        });
+        this.$router.push({ name:'PriceDetail', params: {order_number:row.orderNumber, status:2, actName: "",biztype: "3000"}});
         //保存定价结论的参数
         this.$store.commit('addParamsForPrice',{
             actName: "",

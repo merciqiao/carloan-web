@@ -266,7 +266,7 @@ const router = new Router({
         component: resolve => require(['../components/PriceDetail/index.vue'], resolve)
     },
     {
-        name: 'Login',
+        name: 'Login2',
         path: '/login',
         component: resolve => require(['../components/Login/index.vue'], resolve)
     }

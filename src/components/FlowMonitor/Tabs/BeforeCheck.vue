@@ -180,12 +180,7 @@ export default {
             })
         },
         handleClick(row) {
-            this.$router.push({ name:'PriceDetail', params: {order_number:row.bIZINFNO, status:1, actName: row.cURACTNAME}});
-            this.$store.dispatch('getAuditTabs',{
-                biztype: row.bIZTYPE,
-                actName: row.cURACTNAME,
-                statusId: 1
-            });
+            this.$router.push({ name:'PriceDetail', params: {order_number:row.bIZINFNO, status:1, actName: row.cURACTNAME, bizType: row.bIZTYPE}});
             //保存定价结论的参数
             this.$store.commit('addParamsForPrice',{
                 actName: row.cURACTNAME,
