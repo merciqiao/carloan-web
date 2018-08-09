@@ -1,10 +1,13 @@
 <template>
-    <div>
-      <tool-bar></tool-bar>
-      <dash-board>
-        <div slot="content">
-          <p class="p_title">工作件查询</p>
-          <div>
+   <div class="table"> <!-- 页面表格begin -->
+          <div class="crumbs"> <!-- 页面标题begin -->
+              <el-breadcrumb separator="/">
+                  <el-breadcrumb-item><i class="el-icon-tickets"></i>工作件查询</el-breadcrumb-item>
+              </el-breadcrumb>
+          </div> <!-- 页面标题end--> 
+          <div class="container"><!-- 页面内容区begin -->
+             <div class="handle-box"> <!-- 搜索区begin -->
+  
             <el-row>
               <el-col :span="2"><span>进件编号：</span></el-col>
               <el-col :span="3"><el-input size="mini" v-model="orderNumber"></el-input></el-col>
@@ -89,7 +92,11 @@
                 <el-button size="mini">重置</el-button>
                 <el-button size="mini" type="primary" @click="handleQuery">查询</el-button>
             </div>
-            <div class="table_container">
+  </div> <!-- 搜索区end -->     
+            
+         
+         
+
             <el-table
                 :data="workPieceData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                 border
@@ -183,11 +190,9 @@
                     :total="workPieceData.length">
                 </el-pagination>    
             </div>
-        </div>
-          </div>
-        </div>
-      </dash-board>
-    </div>
+
+          </div><!-- 页面内容区end-->            
+        </div><!-- 页面表格end -->
 </template>
 <script>
 import ToolBar from '../Common/Toolbar/index'

@@ -29,8 +29,7 @@
                     </div>
                     <div class="viewHeight" :style="viewHeight">
                         <div v-viewer="options" class="de_viewer images clearfix">
-                            <div
-                                v-for="{source, thumbnail} in images" class="addMenu">
+                            <div v-for="{source, thumbnail} in images" class="addMenu">
                                 <img :src="thumbnail" :data-source="source" class="image" :key="source" :alt="source.split('/').pop()" @contextmenu.prevent="rightClick" @click="clickImg"/>         
                             </div>
                         </div>
@@ -113,7 +112,7 @@ export default {
   created() {
       setTimeout(() => {
         this.chooseType();
-      },1000)
+      },3000)
   },
   data() {
     return {

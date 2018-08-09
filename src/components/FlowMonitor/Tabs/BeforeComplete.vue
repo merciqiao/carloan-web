@@ -68,7 +68,9 @@
                 </div>
             </el-col>
         </el-row>
-        <div class="table_container">
+       <el-row class="mt20">
+        </el-row>
+       <div class="table"> <!-- 页面表格begin -->
             <el-table
                 :data="beforeCompleteMonitor.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                 border
@@ -141,7 +143,7 @@
                     :total="beforeCompleteMonitor.length">
                 </el-pagination>
             </div>
-        </div>
+         </div><!-- 页面表格end -->
     </div>
 </template>
 <script>

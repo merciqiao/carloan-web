@@ -1,26 +1,34 @@
 <template>  
      <section> 
+        <div class="table"> <!-- 页面表格begin -->
+          <div class="crumbs"> <!-- 页面标题begin -->
+              <el-breadcrumb separator="/">
+                  <el-breadcrumb-item><i class="el-icon-tickets"></i> 岗位管理</el-breadcrumb-item>
+              </el-breadcrumb>
+          </div> <!-- 页面标题end--> 
+          <div class="container"><!-- 页面内容区begin -->
+             <div class="handle-box"> <!-- 搜索区begin -->
   <!--工具条-->
         <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
             <el-form :inline="true" :model="filters">                  
                 <el-form-item>
-                   姓名： <el-input v-model="filters.userName"  placeholder="姓名" style="width:200px; heght:30px;"></el-input>
+                   姓名： <el-input v-model="filters.userName"  placeholder="姓名" style="width:200px; heght:30px;" size="mini"></el-input>
                 </el-form-item>  
                  <el-form-item>
-                   编码：<el-input v-model="filters.userNo"   placeholder="编码" style="width:200px; heght:30px;"></el-input>
+                   编码：<el-input v-model="filters.userNo"   placeholder="编码" style="width:200px; heght:30px;" size="mini"></el-input>
                 </el-form-item> 
                  <el-form-item>
-                   岗位： <el-input v-model="filters.job"  placeholder="岗位" style="width:200px; heght:30px;"></el-input>
+                   岗位： <el-input v-model="filters.job"  placeholder="岗位" style="width:200px; heght:30px;" size="mini"></el-input>
                 </el-form-item> 
                 <br> 
                  <el-form-item>
-                   登录名：<el-input v-model="filters.loginName"   placeholder="登录名" style="width:200px; heght:30px;"></el-input>
+                   登录名：<el-input v-model="filters.loginName"   placeholder="登录名" style="width:200px; heght:30px;" size="mini"></el-input>
                 </el-form-item>  
                  <el-form-item>
-                   手机：<el-input v-model="filters.mobile"   placeholder="手机" style="width:200px; heght:30px;"></el-input>
+                   手机：<el-input v-model="filters.mobile"   placeholder="手机" style="width:200px; heght:30px;" size="mini"></el-input>
                 </el-form-item>  
                 <el-form-item>
-                   性别：<el-select v-model="filters.sex" placeholder="请选择" clearable>
+                   性别：<el-select v-model="filters.sex" placeholder="请选择" clearable size="mini">
                       <el-option  v-for="item in filters.sexOptions"   :key="item.value"  :label="item.label"  :value="item.value" ></el-option>
                  </el-select>
                 </el-form-item>                             
@@ -29,6 +37,7 @@
                 </el-form-item>
             </el-form>
         </el-col>
+         </div> <!-- 搜索区end -->    
           <!--新增按钮-->
             <el-button type="success" icon="el-icon-circle-plus-outline" @click="handleAdd" size="mini" round>新增</el-button>
             <el-button type="danger" icon="el-icon-delete" @click="handleDeleteList" size="mini" round>删除</el-button>
@@ -85,6 +94,8 @@
         <!-- 分页 -->
         <el-pagination @current-change="getResult"  :current-page="currentPage" :page-size="pageSize" layout="total, prev, pager, next" :total="count" >
         </el-pagination>
+        </div><!-- 页面内容区end-->            
+        </div><!-- 页面表格end -->
      <!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">         
 			<el-form :inline="true" :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">

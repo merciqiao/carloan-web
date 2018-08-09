@@ -1,8 +1,11 @@
 <template>
-    <div>
-      <tool-bar></tool-bar>
-      <dash-board>
-        <div slot="content">
+  <div class="table"> <!-- 页面表格begin -->
+          <div class="crumbs"> <!-- 页面标题begin -->
+              <el-breadcrumb separator="/">
+                  <el-breadcrumb-item><i class="el-icon-tickets"></i> 我的任务</el-breadcrumb-item>
+              </el-breadcrumb>
+          </div> <!-- 页面标题end--> 
+          <div class="container"><!-- 页面内容区begin -->
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="待审核案件" name="beforeCheck">
               <before-check></before-check>
@@ -14,9 +17,8 @@
               <have-completed></have-completed>
             </el-tab-pane>
           </el-tabs>
-        </div>
-      </dash-board>
-    </div>
+     </div><!-- 页面内容区end-->            
+        </div><!-- 页面表格end -->
 </template>
 <style lang='less'>
 .test{
