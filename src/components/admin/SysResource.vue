@@ -1,6 +1,12 @@
 <template>
-<el-row :gutter="20"> 
-  <el-col :span="5">
+    <div>
+      <div class="table"> <!-- 页面表格begin -->
+            <div class="crumbs"> <!-- 页面标题begin -->
+                <el-breadcrumb separator="/">
+                    <el-breadcrumb-item><i class="el-icon-tickets"></i> 资源管理</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div> <!-- 页面标题end--> 
+  <div class="container"><!-- 页面内容区begin -->
       <div class="custom-tree-container">  
             <div class="block">   
                 <el-tree   :data="treeData" :props="defaultProps"   node-key="id"    :expand-on-click-node="false" >   
@@ -13,11 +19,10 @@
                         </span>
                 </el-tree>             
         </div>
-</div>
-</el-col>
-<el-col :span="19">
+    </div>
+           </div><!-- 页面内容区end-->            
+    </div><!-- 页面表格end -->
 
-<!-- @node-click="handleNodeClick" -->
 
      <!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">         
@@ -35,19 +40,14 @@
 				</el-form-item>
         <el-form-item label="URL地址" prop="resoureUrl">
 					<el-input v-model="addForm.resoureUrl" auto-complete="off"></el-input>
-				</el-form-item>
-        <!-- <el-form-item label="" prop="parentId">          
-					<el-input v-model="addForm.parentId" auto-complete="off"></el-input>
-				</el-form-item> -->
-        
+				</el-form-item>        
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="addFormVisible=false">取消</el-button>
 				<el-button type="primary" @click="addSubmit" :loading="addLoading">提交</el-button>
 			</div>
 		</el-dialog>
-</el-col>
-</el-row>
+    </div>
 </template> 
 </template>
 
