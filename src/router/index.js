@@ -213,9 +213,9 @@ const router = new Router({
   // ],
   routes: [
     {
-        name: 'PricePost',
+        name: 'Login',
         path: '/',
-        redirect: '/pricepost'
+        redirect: '/login'
     },
     {
         path: '/',

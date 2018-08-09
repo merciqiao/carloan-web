@@ -32,7 +32,7 @@
         </el-row>
         <el-row class="mt20">
             <el-col :span="2"><span>信审接单时间：</span></el-col>
-            <el-col :span="4">
+            <el-col :span="5">
                 <el-date-picker
                     v-model="eNTRYDATE"
                     type="daterange"

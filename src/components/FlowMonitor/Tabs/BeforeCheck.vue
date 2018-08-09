@@ -38,7 +38,7 @@
         </el-row>
         <el-row class="mt20">
             <el-col :span="2"><span>门店进件时间：</span></el-col>
-            <el-col :span="4">
+            <el-col :span="5">
                 <el-date-picker
                     v-model="crMsgdate"
                     type="daterange"
