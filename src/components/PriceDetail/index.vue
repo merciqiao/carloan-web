@@ -73,6 +73,9 @@
                         <el-tab-pane label="反欺诈" v-if="displayTabs.editAntiFraudObj">
                             <anti-fraudlist :fraudList="this.fraudConclusion"></anti-fraudlist>
                         </el-tab-pane>
+                         <el-tab-pane label="电核网核" v-if="displayTabs.surveyInfoObj">
+                           <survey-contacts ></survey-contacts >
+                        </el-tab-pane>
                     </el-tabs>
                 </div>
             </el-col>
@@ -93,7 +96,7 @@ import FinalConclusion from './Tabs/FinalConclusion'
 import ReviewCheck from './Tabs/ReviewCheck'
 import AntiFraud from './Tabs/AntiFraud'
 import AntiFraudlist from './Tabs/AntiFraudlist'
-
+import SurveyContacts from './Tabs/SurveyContacts'
 export default {
   components: {
     CarInfo,
@@ -107,7 +110,8 @@ export default {
     FinalConclusion,
     ReviewCheck,
     AntiFraud,
-    AntiFraudlist
+    AntiFraudlist,
+    SurveyContacts
   },
   created() {
       setTimeout(() => {
@@ -181,6 +185,7 @@ export default {
             "editAuditInfoObj": false,
             "editAntiFraudObj": false,
             "custorReconsiderObj": false
+         
         };
         let showArr = Object.keys(state.myTask.audit_tabs);
         //先判断有哪几个标签显示，如果显示则让它为true

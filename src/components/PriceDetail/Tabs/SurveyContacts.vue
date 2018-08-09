@@ -180,7 +180,7 @@ export default {
   data() {
     return {
       filters: {
-        orderNum: "GZPHYB1542017061500003"
+        orderNum:this.$route.params.order_number|| this.filters.orderNum
       },
       //列表数据
       resultData: [],
@@ -734,6 +734,7 @@ export default {
     this.getResult();
     //根据订单编号及备注类别查询异常备注，初始赋值方便编辑器赋值，否则富文本编辑器初次无值
     this.getYCContent(this.filters.orderNum);
+   // console.log("订单号为----------------------"+this.$route.params.order_number);
   }
 };
 </script>
