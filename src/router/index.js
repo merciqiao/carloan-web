@@ -213,7 +213,7 @@ const router = new Router({
   // ],
   routes: [
     {
-        name: 'Login',
+        name: '',
         path: '/',
         redirect: '/login'
     },
@@ -257,6 +257,36 @@ const router = new Router({
               path: '/sysUser',
               component: resolve => require(['../components/Admin/SysUser.vue'], resolve),
               meta: { title: '用户管理' }
+            },
+            {
+              name: 'SysAcl',
+              path: '/sysAcl',
+              component: resolve => require(['../components/Admin/SysAcl.vue'], resolve),
+              meta: { title: '角色资源管理' }
+            },
+            {
+              name: 'SysMenu',
+              path: '/sysMenu',
+              component: resolve => require(['../components/Admin/SysMenu.vue'], resolve),
+              meta: { title: '菜单管理' }
+            },
+            {
+              name: 'SysResource',
+              path: '/sysResource',
+              component: resolve => require(['../components/Admin/SysResource.vue'], resolve),
+              meta: { title: '资源管理' }
+            },
+            {
+              name: 'SysRole',
+              path: '/sysRole',
+              component: resolve => require(['../components/Admin/SysRole.vue'], resolve),
+              meta: { title: '角色管理' }
+            },
+            {
+              name: 'sysRoleMap',
+              path: '/sysRoleMap',
+              component: resolve => require(['../components/Admin/SysRoleMap.vue'], resolve),
+              meta: { title: '角色权限管理' }
             }
         ]
     },

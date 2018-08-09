@@ -1,15 +1,18 @@
 <template>
+  <div class="table"> <!-- 页面表格begin -->
+          <div class="crumbs"> <!-- 页面标题begin -->
+              <el-breadcrumb separator="/">
+                  <el-breadcrumb-item><i class="el-icon-tickets"></i> 角色管理</el-breadcrumb-item>
+              </el-breadcrumb>
+          </div> <!-- 页面标题end--> 
+          <div class="container"><!-- 页面内容区begin -->
     <div id="app" >
         <div style=" width:50%;float:left;">
-           <h5> 角色管理</h5> 
-              角色名称： <el-input v-model="s_rolename" label="角色编码" placeholder="角色编码" style="width:200px; heght:30px;"></el-input>
-              <br>
-              角色编码：  <el-input v-model="s_rolecode" label="角色编码"  placeholder="角色编码" style="width:200px; heght:30px;"></el-input>
-             <br>
-              <!-- 角色类型：<select v-model="s_roletype"  style="width:200px;" >
-                     <option v-for="(item,index) in roleTypeData":value="item.dictDetailValue">{{ item.dictDetailName }}</option>
-                 </select>	
-                    <br><br>		 -->
+         
+              角色名称： <el-input v-model="s_rolename" label="角色编码" placeholder="角色编码" style="width:200px; heght:30px;" size="mini"></el-input>
+              
+              角色编码：  <el-input v-model="s_rolecode" label="角色编码"  placeholder="角色编码" style="width:200px; heght:30px;" size="mini"></el-input>
+            
                 <el-button type="success" icon="el-icon-search" @click="getResult(1)" size="mini">搜索</el-button>
                 <br>
                 <br>
@@ -32,8 +35,7 @@
             </el-table-column>
             <el-table-column prop="roleType" label="角色类型">
             </el-table-column>
-             <!-- <el-table-column prop="id" label="id" >
-            </el-table-column> -->
+          
             <el-table-column label="编辑" width="100">
                 <template slot-scope="scope">
                     <el-button type="primary" icon="el-icon-edit" size="mini"  @click="enditRole(scope.row)">编辑</el-button>
@@ -46,8 +48,6 @@
             </el-table-column>
         </el-table>
         <br>
-       
-       
         <br>
         <!--分页条total, sizes, prev, pager, next, jumper-->
         
@@ -60,19 +60,22 @@
          :total="roletotal" >
         </el-pagination>
         <!--新增界面-->
-		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false"  style="width:50%">
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false" >
+			<el-form :model="addForm"  :rules="addFormRules" ref="addForm" label-width="166px">
 				<el-form-item label="角色名称" prop="roleName">
-					<el-input v-model="addForm.roleName" auto-complete="off"  style="width:200px;" ></el-input>
+					<el-input v-model="addForm.roleName" auto-complete="off"  style="width:400px;" ></el-input>
 				</el-form-item>
-        <el-form-item label="角色编码" prop="roleCode">
-					<el-input v-model="addForm.roleCode" auto-complete="off"  style="width:200px;" ></el-input>
+               <el-form-item label="角色编码" prop="roleCode">
+					<el-input v-model="addForm.roleCode" auto-complete="off"  style="width:400px;" ></el-input>
 				</el-form-item>
 			 <el-form-item label="角色类型" prop="roleType">
-                 <select v-model="addForm.roleType"  style="width:200px;" >
+                 <!-- <select v-model="addForm.roleType"  style="width:200px;" >
                      <option v-for="(item,index) in roleTypeData":value="item.dictDetailValue">{{ item.dictDetailName }}</option>
-                 </select>					
-				</el-form-item>        	
+                 </select>					 -->
+                 <el-select v-model="addForm.roleType" placeholder="请选择" clearable >
+                      <el-option  v-for="item in roleTypeData"   :key="item.value"  :label="item.dictDetailName"  :value="item.dictDetailValue" ></el-option>
+                 </el-select>
+			</el-form-item>        	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click="addFormVisible = false">取消</el-button>
@@ -80,12 +83,10 @@
 			</div>
 		</el-dialog>
         </div>
-        <div style=" width:45%;float:right;">
-            <h5> 角色用户</h5>
+        <div style=" width:45%;float:right;">          
              <el-col :span="3" class="grid">
             <el-button type="success" icon="el-icon-circle-plus-outline" @click="addRoleUser(1)" size="mini" round>新增</el-button>
              </el-col>
-              
            <el-col :span="1" class="grid">
             <el-button type="danger" icon="el-icon-delete" @click="deleteUserRole" size="mini" round>删除</el-button>
         </el-col>
@@ -112,10 +113,10 @@
         </el-pagination>  
         <br>
          <!--新增界面-->
-		<el-dialog title="新增用户" :visible.sync="addRoleUserVisible" :close-on-click-modal="false"  style="width:50%;">
+		<el-dialog title="新增用户" :visible.sync="addRoleUserVisible" :close-on-click-modal="false" >
 			<el-row>
             <el-col :span="200" class="grid">
-                <el-input v-model="s_username" label="用户名称"  placeholder="请输入内容" style="width:200px; heght:30px;"></el-input>
+                <el-input v-model="s_username" label="用户名称"  placeholder="请输入内容" style="width:200px; heght:30px;" size="mini"></el-input>
             </el-col>
             <el-col :span="1" class="grid">
                 <el-button type="success" @click="addRoleUser(1)" icon="el-icon-search" size="mini">搜索</el-button>
@@ -150,7 +151,9 @@
 			</div>
 		</el-dialog>
         </div>
-    </div>    
+    </div> 
+       </div><!-- 页面内容区end-->            
+        </div><!-- 页面表格end -->  
 </template>
 <script>
     export default {
@@ -472,13 +475,13 @@
     };
 </script>
 <style>
-    #app {
+    /* #app {
         font-family: Helvetica, sans-serif;
         text-align: center;
-    }
-    #roleuser {
+    } */
+    /* #roleuser {
         font-family: Helvetica, sans-serif;
         text-align: center;
     }    
-    el-input{width:200px;height: 50px;}
+    el-input{width:200px;height: 50px;} */
 </style>

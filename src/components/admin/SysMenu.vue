@@ -1,6 +1,13 @@
 <template>
-<el-row :gutter="20"> 
-  <el-col :span="5">
+<div>
+  <div class="table"> <!-- 页面表格begin -->
+            <div class="crumbs"> <!-- 页面标题begin -->
+                <el-breadcrumb separator="/">
+                    <el-breadcrumb-item><i class="el-icon-tickets"></i> 菜单管理</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div> <!-- 页面标题end--> 
+            <div class="container"><!-- 页面内容区begin -->
+
       <div class="custom-tree-container">  
             <div class="block">   
                 <el-tree   :data="treeData" :props="defaultProps"   node-key="id"    :expand-on-click-node="false" >   
@@ -11,14 +18,11 @@
                            <i class="el-icon-delete" @click="() => remove(node, data)"></i>
                            </span>   
                         </span>
-                </el-tree>             
+                </el-tree>            
         </div>
-</div>
-</el-col>
-<el-col :span="19">
-
-<!-- @node-click="handleNodeClick" -->
-
+    </div>
+       </div><!-- 页面内容区end-->            
+    </div><!-- 页面表格end -->
      <!--新增界面-->
 		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">         
 			<el-form :model="addForm" label-width="80px" :rules="formRules" ref="addForm">
@@ -52,10 +56,9 @@
            
           <el-tree :data="resourcetree" :props="defaultProps"  @node-click="handleNodeClick" v-model="addForm.resourceId" ref="resourcetreeref"></el-tree>
           </el-dialog>
-</el-col>
-</el-row>
+</div>
 </template> 
-</template>
+
 
 <script>
   export default {

@@ -32,7 +32,7 @@
               <el-col :span="2"><span>手机：</span></el-col>
               <el-col :span="3"><el-input size="mini" v-model="phoneNumber"></el-input></el-col>
               <el-col :span="2"><span>审批类型：</span></el-col>
-              <el-col :span="4">
+              <el-col :span="3">
                   <el-select placeholder="请选择" size="mini" v-model="auditType">
                       <el-option v-for="item in approvalStatus" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
                   </el-select>
@@ -58,13 +58,13 @@
                   </el-select>
               </el-col>
               <el-col :span="2"><span>城市：</span></el-col>
-              <el-col :span="3">
+              <el-col :span="5">
                   <el-select placeholder="请选择" size="mini" v-model="secondLevelId">
                       <el-option v-for="item in cityData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                   </el-select>
               </el-col>
               <el-col :span="2"><span>信审开始时间：</span></el-col>
-              <el-col :span="5">
+              <el-col :span="8">
                   <el-date-picker
                       v-model="oneStart"
                       type="daterange"
@@ -74,9 +74,11 @@
                       start-placeholde="开始日期"
                       end-placeholde="结束日期">
                   </el-date-picker>
-              </el-col>
+              </el-col>            
+            </el-row>
+             <el-row class="mt20">              
               <el-col :span="2"><span>审批结束时间：</span></el-col>
-              <el-col :span="5">
+              <el-col :span="8">
                   <el-date-picker
                       v-model="oneEnd"
                       type="daterange"
@@ -87,11 +89,13 @@
                       end-placeholde="结束日期">
                   </el-date-picker>
               </el-col>
-            </el-row>
-            <div class="buttons">
+                <el-col :span="6"> 
                 <el-button size="mini">重置</el-button>
                 <el-button size="mini" type="primary" @click="handleQuery">查询</el-button>
-            </div>
+            </el-col>
+            </el-row>
+            <el-row class="mt20">
+                 </el-row>
   </div> <!-- 搜索区end -->     
             
          
