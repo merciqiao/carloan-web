@@ -32,8 +32,8 @@
             </el-table-column>
             <el-table-column prop="roleType" label="角色类型">
             </el-table-column>
-             <el-table-column prop="id" label="id" >
-            </el-table-column>
+             <!-- <el-table-column prop="id" label="id" >
+            </el-table-column> -->
             <el-table-column label="编辑" width="100">
                 <template slot-scope="scope">
                     <el-button type="primary" icon="el-icon-edit" size="mini"  @click="enditRole(scope.row)">编辑</el-button>

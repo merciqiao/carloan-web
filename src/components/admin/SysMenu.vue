@@ -167,7 +167,8 @@
                 orderBy: "",
                 menuIcon: "",
                 resourceId: "" ,
-                parentId:node.data.id    
+                parentId:node.data.id,
+                resourceName:"--请选择--"   
         };
       }
        if(param=='2')
@@ -183,7 +184,11 @@
                 data: param
             }).then(
                 function(resultData) {
-                _this.addForm = resultData.data.data;               
+                _this.addForm = resultData.data.data; 
+                if(_this.addForm.resourceName=="" )
+                {
+                  _this.addForm.resourceName="--请选择--";
+                }              
                 _this.listLoading = false;
                 }
             );           

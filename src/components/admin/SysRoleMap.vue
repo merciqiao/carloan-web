@@ -15,7 +15,7 @@
       
     <!--新增按钮-->
        
-            <el-button type="success" icon="el-icon-circle-plus-outline" @click="handleAdd" size="mini" round>新增1</el-button>
+            <el-button type="success" icon="el-icon-circle-plus-outline" @click="handleAdd" size="mini" round>新增</el-button>
             <el-button type="danger" icon="el-icon-delete" @click="handledelete" size="mini" round>删除</el-button>
        
         <!--表格数据及操作-->
@@ -160,17 +160,17 @@
         handleAdd:function()
         {         
           var _this=this;
-          _this.addFormVisible=true;
+          _this.addFormVisible=true;                  
            _this.addForm = {
                 id:0,               
                 roleCode: "",
-                mappingRoleCode: ""       
+                mappingRoleCode: []       
             };
           
         },
         handledelete:function()
         {
-           var rows= this.selectList;alert(rows);
+           var rows= this.selectList;//alert(rows);
                if (rows) {
                rows.forEach(row => {               
                 var _this = this;
@@ -202,7 +202,7 @@
                     //alert(param);
                     this.addForm.mappingRoleCode.forEach(mappingRole => { 
                       let param = Object.assign({}, {roleCode:this.addForm.roleCode,mappingRoleCode:mappingRole});
-                      alert(param);
+                      //alert(param);
                     this.$ajax({
                     method: "post",
                     url: "/api/sysRoleMapping-api/add",
@@ -211,11 +211,11 @@
                    
                     });                   
                     });
-
+                    
                     this.$message({
                         message: "提交成功",
                         type: "success"
-                    });
+                    });                   
                     _this.addFormVisible=false;
                     //this.$refs["addForm"].resetFields();                   
                     this.getResult(1);
