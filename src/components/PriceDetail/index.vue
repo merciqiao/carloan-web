@@ -56,7 +56,7 @@
                             <history-match :carNumMatch="this.carNumberMatch" :carFraMatch="this.carFrameMatch" :idMatch="this.idCardMatch" :phoneMatch="this.phoneMatch"></history-match>
                         </el-tab-pane>
                         <el-tab-pane label="审核意见" v-if="displayTabs.editAuditInfoObj">
-                            <check-opinion :paramAudit="this.paramsForAudit" :auditList="this.auditConclusion" :actName="this.actName" :bizType="this.bizType" :orderNumber="this.orderNum"></check-opinion>
+                           <check-opinion :paramAudit="this.paramsForAudit" :auditList="this.auditConclusion" :actName="this.actName" :bizType="this.bizType" :orderNumber="this.orderNum" :carInfoId="this.carInfoId" :processId="this.processId"></check-opinion>
                         </el-tab-pane>
                         <el-tab-pane label="客户复议" v-if="displayTabs.custorReconsiderObj">
                             <custom-reconsider :orderNum="this.$route.query.order_number"></custom-reconsider>
@@ -139,6 +139,8 @@ export default {
       clientTop: 0,
       showContextMenu:'none',
       show:false,
+      processId:this.$route.query.processId,
+      carInfoId:this.$route.query.carInfoId,
       orderNum:this.$route.query.order_number,
       status:this.$route.query.status,
       actName:this.$route.query.actName,
