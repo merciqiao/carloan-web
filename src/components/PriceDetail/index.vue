@@ -44,7 +44,7 @@
                             <car-info :cars="this.carsInfo"></car-info>
                         </el-tab-pane>
                         <el-tab-pane label="定价结论" v-if="displayTabs.editAuditCarPriceObj">
-                            <price-conclusion :paramPrice="this.paramsForPrice" :conclusionList="this.priceConclusion"></price-conclusion>
+                            <price-conclusion :paramPrice="this.paramsForPrice" :conclusionList="this.priceConclusion" :priceid="this.priceid" :orderNum="this.$route.params.order_number" :status="this.$route.params.status"></price-conclusion>
                         </el-tab-pane>
                         <el-tab-pane label="流程轨迹" v-if="displayTabs.logInfoObj">
                             <work-log :logs="this.historyLog"></work-log>
@@ -67,10 +67,10 @@
                         <el-tab-pane label="定价结论" v-if="displayTabs.auditCarPriceObj">
                             <final-conclusion :conclusionList="this.priceConclusion"></final-conclusion>
                         </el-tab-pane>
-                        <el-tab-pane label="反欺诈" v-if="displayTabs.antiFraudObj">
-                            <anti-fraud :paramAnit="this.paramsForAnit" :fraudList="this.fraudConclusion"></anti-fraud>
-                        </el-tab-pane>
                         <el-tab-pane label="反欺诈" v-if="displayTabs.editAntiFraudObj">
+                            <anti-fraud :paramAnit="this.paramsForAnit" :fraudList="this.fraudConclusion" :antifraudid="this.antifraudid"></anti-fraud>
+                        </el-tab-pane>
+                        <el-tab-pane label="反欺诈" v-if="displayTabs.antiFraudObj">
                             <anti-fraudlist :fraudList="this.fraudConclusion"></anti-fraudlist>
                         </el-tab-pane>
                          <el-tab-pane label="电核网核" v-if="displayTabs.surveyInfoObj">
@@ -161,6 +161,8 @@ export default {
     auditConclusion: state => state.orderInfo.auditList,
     fraudConclusion: state => state.orderInfo.fraudList,
     historyLog: state => state.orderInfo.historyLogs,
+    priceid:state => state.orderInfo.priceid,
+    antifraudid:state => state.orderInfo.antifraudid,
     fileType(state) {
         let fileTypeArr = [];
         state.orderInfo.cars_file.map((item) => {

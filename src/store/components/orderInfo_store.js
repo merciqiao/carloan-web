@@ -16,7 +16,9 @@ export default {
         historyLogs: [],
         fraudList: [],
         fuyiList:[],
-        carLoanInfoId:''
+        carLoanInfoId:'',
+        priceid:"0",
+        antifraudid:"0"
 
     },
     mutations: {
@@ -63,6 +65,12 @@ export default {
         },
         getCarLoanInfoId(state, payload) {          
             state.carLoanInfoId = [].concat(payload.carLoanInfoAddId);
+        },
+        getpriceid(state,payload) {
+            state.priceid = [].concat(payload.priceid);
+        },
+        getantifraudid(state,payload) {
+            state.antifraudid = [].concat(payload.antifraudid);
         }
     },
     actions: {
@@ -141,6 +149,7 @@ export default {
             return Axios.post('/api/creditaudit-api/saveLoanPrice', payload)
                .then((res) => {
                    if(res.data.status == "SUCCESS") {
+                    commit('getpriceid',{priceid:res.data.data});
                         commit('send_msg', {
                             msg: '保存定价结论成功！'
                         })
@@ -289,6 +298,7 @@ export default {
             return Axios.post('/api/antifraudOpnition-api/saveAntifraudOpnition', payload)
                .then((res) => {
                    if(res.data.status == "SUCCESS") {
+                    commit('getantifraudid',{antifraudid:res.data.data});
                         commit('send_msg', {
                             msg: '保存反欺诈结论成功！'
                         })
