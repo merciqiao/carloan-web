@@ -10,6 +10,7 @@ import router from './router'
 import 'less/base.less'
 import store from './store'
 import axios from 'axios'
+import util from './common/util'
 Vue.prototype.$ajax=axios
 
 
@@ -19,6 +20,7 @@ Vue.use(Viewer, {
     zIndex: 9999
   }
 })
+Vue.use(util)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
