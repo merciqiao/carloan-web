@@ -175,7 +175,7 @@ export default {
             this.currentPage = val;
         },
         handleClick(row) {
-            this.$router.push({ name:'PriceDetail', params: {order_number:row.bIZINFNO, status:2, actName: row.cURACTNAME,biztype: row.bIZTYPE}});
+            this.$router.push({ name:'PriceDetail', query: {order_number:row.bIZINFNO, status:2, actName: row.cURACTNAME,bizType: row.bIZTYPE}});
             //保存定价结论的参数
             this.$store.commit('addParamsForPrice',{
                 actName: row.cURACTNAME,

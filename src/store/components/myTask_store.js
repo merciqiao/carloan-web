@@ -251,18 +251,19 @@ export default {
                 })
         },
         //获取显示标签
-        getAuditTabs({ commit },payload) {
+        getAuditTabs({ commit },payload) {  
+           
             return Axios.post('/api/creditaudit-api/getAuditTabs',qs.stringify(payload),{
                 headers: {
                     'Content-Type':'application/x-www-form-urlencoded'
                 }
-            }) 
-                .then((res) => {
-                    if(res.data.status == 'SUCCESS') {
+            }).then((res) => {
+                    if(res.data.status == 'SUCCESS') { 
                         commit('addTabs',{
                             com_tab: res.data.data
+                            
                         })
-                    }
+                    }                   
                 })
                 .catch((error) => {
                     msg: '请与管理员联系！'

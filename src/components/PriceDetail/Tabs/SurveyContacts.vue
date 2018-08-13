@@ -180,7 +180,7 @@ export default {
   data() {
     return {
       filters: {
-        orderNum:this.$route.params.order_number|| this.filters.orderNum
+        orderNum:this.$route.query.order_number
       },
       //列表数据
       resultData: [],

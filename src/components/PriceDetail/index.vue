@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="de_top">
-            <span>进件编号：{{this.$route.params.order_number}}</span>
+            <span>进件编号：{{this.orderNum}}</span>
             <span>客户姓名：{{userInfo.userName}}</span>
             <span>申请产品：{{orderInfo.productType}}</span>
             <span>申请金额：{{orderInfo.applicationLimit}}</span>
@@ -55,11 +55,11 @@
                         <el-tab-pane label="历史匹配" v-if="displayTabs.matchInfoObj">
                             <history-match :carNumMatch="this.carNumberMatch" :carFraMatch="this.carFrameMatch" :idMatch="this.idCardMatch" :phoneMatch="this.phoneMatch"></history-match>
                         </el-tab-pane>
-                        <el-tab-pane label="审核意见" v-if="displayTabs.auditInfoObj">
-                            <check-opinion :paramAudit="this.paramsForAudit" :auditList="this.auditConclusion"></check-opinion>
+                        <el-tab-pane label="审核意见" v-if="displayTabs.editAuditInfoObj">
+                            <check-opinion :paramAudit="this.paramsForAudit" :auditList="this.auditConclusion" :actName="this.actName" :bizType="this.bizType" :orderNumber="this.orderNum"></check-opinion>
                         </el-tab-pane>
                         <el-tab-pane label="客户复议" v-if="displayTabs.custorReconsiderObj">
-                            <custom-reconsider :orderNum="this.$route.params.order_number"></custom-reconsider>
+                            <custom-reconsider :orderNum="this.$route.query.order_number"></custom-reconsider>
                         </el-tab-pane>
                         <el-tab-pane label="审核意见" v-if="displayTabs.auditInfoObj">
                             <final-check :auditList="this.auditConclusion"></final-check>
@@ -139,10 +139,10 @@ export default {
       clientTop: 0,
       showContextMenu:'none',
       show:false,
-      orderNum:'',
-      status:'',
-      actName:'',
-      biztype:''
+      orderNum:this.$route.query.order_number,
+      status:this.$route.query.status,
+      actName:this.$route.query.actName,
+      bizType:this.$route.query.bizType
     }
   },
   computed:mapState({
@@ -171,14 +171,16 @@ export default {
         return fileTypeArr;
     },
     displayTabs(state) {
-        //return Object.keys(state.myTask.audit_tabs);
+         //let showTab =  Object.keys(state.myTask.audit_tabs);
+        // let showTab = state.myTask.audit_tabs;
+        // return showTab;
         let showTab = {
             "logInfoObj": false,
             "matchInfoObj": false,
             "carInfoObj": false,
             "customerInfoObj": false,
             "surveyInfoObj": false,
-            "auditInfoObj": false,
+            "auditInfoObj": true,
             "auditCarPriceObj": false,
             "antiFraudObj": false,
             "editAuditCarPriceObj": false,
@@ -186,8 +188,10 @@ export default {
             "editAntiFraudObj": false,
             "custorReconsiderObj": false
          
-        };
+        };       
+        
         let showArr = Object.keys(state.myTask.audit_tabs);
+      
         //先判断有哪几个标签显示，如果显示则让它为true
         for(let i in showTab) {
             if(showArr.indexOf(i) !== -1) {
@@ -211,7 +215,7 @@ export default {
                 showTab.editAntiFraudObj = true;
                 showTab.antiFraudObj = false;
             }
-        }
+        }       
         return showTab;
     },
     paramsForPrice: state => state.myTask.params_price,
@@ -239,6 +243,7 @@ export default {
           this.images = [];
           if(item) {
               this.carsFile.map((i) => {
+
               if(i.fileName == item) {
                   let imgObj = {};
                   imgObj.source = i.fileUrl;
@@ -255,103 +260,83 @@ export default {
       },
       handleTabClick(tab,event) {
           console.log(tab,event);
-      },
-      saveParams() {
-          if(this.$route.params.order_number) {
-              localStorage.setItem('orderNum',this.$route.params.order_number);
-          }else{
-              this.orderNum = localStorage.getItem('orderNum');
-          }
-          if(this.$route.params.status) {
-              localStorage.setItem('status',this.$route.params.status);
-          }else{
-              this.status = localStorage.getItem('status');
-          }
-          if(this.$route.params.actName) {
-              localStorage.setItem('actName',this.$route.params.actName);
-          }else{
-              this.status = localStorage.getItem('actName');
-          }
-          if(this.$route.params.biztype) {
-              localStorage.setItem('biztype',this.$route.params.biztype);
-          }else{
-              this.biztype = localStorage.getItem('biztype');
-          }
       }
+      
   },
-  mounted() {
+  mounted() { 
+     
       //从url过来的参数保存到localStorage中
-      this.saveParams(),
+      //this.saveParams(),
       //获取订单信息
       this.$store.dispatch('getOrderInfo',{
           headers: {'token': this.token},
-          params: {order_number: this.$route.params.order_number || this.orderNum}
+          params: {order_number: this.$route.query.order_number }
       }),
       //获取用户信息
       this.$store.dispatch('getUserInfo',{
           headers: {'token': this.token},
-          params: {order_number: this.$route.params.order_number || this.orderNum}
+          params: {order_number: this.$route.query.order_number }
       }),
       //获取申请人联系人信息
       this.$store.dispatch('getContactsInfo',{
           headers: {'token': this.token},
-          params: {order_number: this.$route.params.order_number || this.orderNum}
+          params: {order_number: this.$route.query.order_number }
       }),
       //获取车辆信息
       this.$store.dispatch('getCarsInfo',{
           headers: {'token': this.token},
-          params: {order_number: this.$route.params.order_number || this.orderNum}
+          params: {order_number: this.$route.query.order_number }
       })
       //获取车牌号匹配
       this.$store.dispatch('getCarNumberMatch',{
           headers: {'token': this.token},
-          params: {orderNumber: this.$route.params.order_number || this.orderNum}
+          params: {orderNumber: this.$route.query.order_number }
       }),
       //获取车架号匹配
       this.$store.dispatch('getCarFrameMatch',{
           headers: {'token': this.token},
-          params: {orderNumber: this.$route.params.order_number || this.orderNum}
+          params: {orderNumber: this.$route.query.order_number}
       }),
       //获取身份证号匹配
       this.$store.dispatch('getIdCardMatch',{
           headers: {'token': this.token},
-          params: {orderNumber: this.$route.params.order_number || this.orderNum}
+          params: {orderNumber: this.$route.query.order_number }
       }),
       //获取手机号匹配
       this.$store.dispatch('getPhoneMatch',{
           headers: {'token': this.token},
-          params: {orderNumber: this.$route.params.order_number || this.orderNum}
+          params: {orderNumber: this.$route.query.order_number }
       }),
       //获取附件信息
       this.$store.dispatch('getCarsFile',{
           headers: {'token': this.token},
-          params: {order_number: this.$route.params.order_number || this.orderNum}
+          params: {order_number: this.$route.query.order_number }
       }),
       //获取定价结论列表
       this.$store.dispatch('getPriceConclusion',{
           headers: {'token': this.token},
-          params: {ordernum: this.$route.params.order_number || this.orderNum, status: this.$route.params.status || this.status}
+          params: {ordernum: this.$route.query.order_number, status: this.$route.query.status}
       }),
       //获取审核意见列表
       this.$store.dispatch('getAuditConclusion',{
           headers: {'token': this.token},
-          params: {ordernum: this.$route.params.order_number || this.orderNum, status: this.$route.params.status || this.status, actName: this.$route.params.actName || this.actName}
+          params: {ordernum: this.$route.query.order_number , status: this.$route.query.status, actName: this.$route.query.actName}
       }),
       //获取流程轨迹
       this.$store.dispatch('getHistoryLogs',{
           headers: {'token': this.token},
-          params: {ordernum: this.$route.params.order_number || this.orderNum}
+          params: {ordernum: this.$route.query.order_number}
       }),
       //获取反欺诈项
       this.$store.dispatch('getAntiFrauds',{
           headers: {'token': this.token},
-          params: {ordernum: this.$route.params.order_number || this.orderNum, status: this.$route.params.status || this.status}
+          params: {ordernum: this.$route.query.order_number, status: this.$route.query.status}
       }),
       //获取标签
       this.$store.dispatch('getAuditTabs',{
-          biztype: this.$route.params.biztype || this.biztype,
-          actName: this.$route.params.actName || this.actName,
-          statusId: this.$route.params.status || this.status
+          biztype: this.$route.query.bizType,
+          actName: this.$route.query.actName,
+          statusId: this.$route.query.status
       });
   }
 }

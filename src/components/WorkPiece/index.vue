@@ -96,10 +96,7 @@
             </el-row>
             <el-row class="mt20">
                  </el-row>
-  </div> <!-- 搜索区end -->     
-            
-         
-         
+  </div> <!-- 搜索区end --> 
 
             <el-table
                 :data="workPieceData.slice((currentPage-1)*pageSize,currentPage*pageSize)"
@@ -228,7 +225,8 @@ export default {
   },
   methods: {
       handleClick(row) {
-        this.$router.push({ name:'PriceDetail', params: {order_number:row.orderNumber, status:2, actName: "",biztype: "3000"}});
+       
+        this.$router.push({ name:'PriceDetail', query: {order_number:row.orderNumber, status:2, actName:row.auditType,bizType: "3000"}});
         //保存定价结论的参数
         this.$store.commit('addParamsForPrice',{
             actName: "",

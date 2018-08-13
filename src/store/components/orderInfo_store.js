@@ -15,7 +15,9 @@ export default {
         periodList: [],
         historyLogs: [],
         fraudList: [],
-        fuyiList:[]
+        fuyiList:[],
+        carLoanInfoId:''
+
     },
     mutations: {
         addOrderInfo(state,payload) {
@@ -58,6 +60,9 @@ export default {
         },
         addFuyi(state, payload) {
             state.fuyiList = [].concat(payload.com_fuyi);
+        },
+        getCarLoanInfoId(state, payload) {          
+            state.carLoanInfoId = [].concat(payload.carLoanInfoAddId);
         }
     },
     actions: {
@@ -172,18 +177,23 @@ export default {
                })
         },
         //保存/提交审核意见
-        saveAuditConclusion({commit}, payload) {
+        saveAuditConclusion({commit}, payload) {                 
             return Axios.post('/api/creditaudit-api/saveLoanOpinion', payload)
                .then((res) => {
                    if(res.data.status == "SUCCESS") {
                         commit('send_msg', {
-                            msg: '保存定价结论成功！'
+                            msg: '保存审核意见成功！'
                         })
+                      
                    }else{
                         commit('send_msg', {
                             msg: res.data.message
                         })
                    }
+                   commit('getCarLoanInfoId', {
+                    carLoanInfoAddId: res.data.data 
+                })
+                  
                })
                .catch((error) => {
                     commit('send_msg', {
