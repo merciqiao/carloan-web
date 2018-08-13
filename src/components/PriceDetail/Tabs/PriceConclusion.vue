@@ -29,10 +29,10 @@
                         </el-input>
                     </el-col>
                 </el-row>
-                <div v-if="list.isEdit == 'true'">
+                <div v-if="list.isEdit == 'true'"><div style="display:none;">{{isEdit=false}}</div>
                     <div class="pri_btn_container mb10">
                         <el-button @click="handleListSave(list,0)">保存</el-button>
-                        <el-button type="primary" @click="handleListSubmit(list,1)">提交</el-button>
+                        <el-button type="primary" @click="handleListSave(list,1)">提交</el-button>
                     </div>
                 </div>
             </el-collapse-item>
@@ -78,7 +78,7 @@
 <script>
 import {mapState} from 'vuex'
 export default{
-    props: ['paramPrice','conclusionList'],
+    props: ['paramPrice','conclusionList','priceid',"orderNum","status"],
     data() {
         return {
             conclusionOptions: [{
@@ -95,7 +95,9 @@ export default{
             pricingMoney: 0,
             pricingRemarks: '',
             valueForCollapse:["100"],
-            isEdit: true
+            id:this.priceid,
+            isEdit: true,
+
         }
     },
     methods: {
@@ -104,16 +106,26 @@ export default{
                 operation: ope,
                 pricingConclusion: this.pricingConclusion,
                 pricingMoney: this.pricingMoney,
-                pricingRemarks: this.pricingRemarks
+                pricingRemarks: this.pricingRemarks,
+                id:this.priceid
             });
+            console.log(this.priceid);
             if(this.pricingConclusion !== "同意") {
                 if(this.pricingRemarks == "") {
                     this.$message('备注信息不能为空');
                 }else{
-                    this.$store.dispatch('savePriceConclusion',params);
+                    this.$store.dispatch('savePriceConclusion',params).then(() => { 
+                                                                this.$message({
+                                                                message: "提交成功",
+                                                                type: "success"
+                                                                });});
                 }
             }else{
-                this.$store.dispatch('savePriceConclusion',params);
+                this.$store.dispatch('savePriceConclusion',params).then(() => { 
+                                                                this.$message({
+                                                                message: "提交成功",
+                                                                type: "success"
+                                                                });});
             }
         },
         handleListSave(list,ope) {
@@ -129,15 +141,25 @@ export default{
                 if(params.pricingRemarks == '') {
                     this.$message('备注信息不能为空');
                 }else{
-                    this.$store.dispatch('savePriceConclusion',params);
+                    this.$store.dispatch('savePriceConclusion',params).then(() => { 
+                                                                this.$message({
+                                                                message: "提交成功",
+                                                                type: "success"
+                                                                });});
                 }
             }else{
-                this.$store.dispatch('savePriceConclusion',params);
+                this.$store.dispatch('savePriceConclusion',params).then(() => { 
+                                                                this.$message({
+                                                                message: "提交成功",
+                                                                type: "success"
+                                                                });});
             }
         }
     },
     computed:mapState({
+        token: state => state.login.user_token,
         msg: state => state.orderInfo.order_msg,
+        priceList: state=> state.orderInfo.conclusionList,
         ids(state) {
             let ids = [];
             state.orderInfo.conclusionList.forEach((item) => {
@@ -145,7 +167,14 @@ export default{
             });
             return ids;
         }
-    })
+    }),
+    // mounted() {
+    //     //获取定价结论列表
+    //         this.$store.dispatch('getPriceConclusion',{
+    //             headers: {'token': this.token},
+    //             params: {ordernum: this.orderNum, status: this.status}
+    //         })
+    // }
 }
 </script>
 <style lang="less">

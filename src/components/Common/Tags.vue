@@ -9,8 +9,8 @@
             </li>
         </ul>
         <div class="tags-close-box">
-            <el-dropdown @command="handleTags">
-                <el-button size="mini" type="primary">
+            <el-dropdown @command="handleTags" style="margin-top:1px;">
+                <el-button size="medium " type="primary">
                     标签选项<i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <el-dropdown-menu size="small" slot="dropdown">
@@ -93,7 +93,7 @@
 <style>
     .tags {
         position: relative;
-        height: 30px;
+        height: 41px;
         overflow: hidden;
         background: #fff;
         padding-right: 120px;
@@ -112,8 +112,8 @@
         font-size: 12px;
         overflow: hidden;
         cursor: pointer;
-        height: 23px;
-        line-height: 23px;
+        height: 33px;
+        line-height: 33px;
         border: 1px solid #e9eaec;
         background: #fff;
         padding: 0 5px 0 12px;

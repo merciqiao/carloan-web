@@ -118,8 +118,10 @@ export default{
                 fraudConclusion: this.fraudConclusion,
                 mainOption: this.mainOption,
                 transition: this.fraudConclusion,
-                remarks: this.remarks
+                remarks: this.remarks,
+                id:parseInt(this.antifraudid)
             });
+           console.log(this.antifraudid);
             this.$store.dispatch('saveAntiFraud',params);
         },
         handleListSave(list,ope) {
@@ -128,12 +130,13 @@ export default{
                 fraudConclusion: list.fraudConclusion,
                 mainOption: list.mainOption,
                 transition: list.fraudConclusion,
-                remarks: list.remarks
+                remarks: list.remarks,
+                id:list.id
             });
             this.$store.dispatch('saveAntiFraud',params);
         }
     },
-    props: ["paramAnit","fraudList"]
+    props: ["paramAnit","fraudList","antifraudid"]
 }
 </script>
 <style lang="less">
