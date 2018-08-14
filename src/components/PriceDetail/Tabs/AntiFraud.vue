@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{msg}}
+        <!-- {{msg}} -->
         <el-collapse v-model="ids" v-for="list in fraudList" :key=list.id v-if="fraudList.length!==0">
             <el-collapse-item title="反欺诈调查" :name=list.id class="lrBorder">
                 <el-row class="mt10">
@@ -34,7 +34,7 @@
                         </el-input>
                     </el-col>
                 </el-row>
-                <div v-if="list.isEdit == 'true'">
+                <div v-if="list.isEdit == 'true'"><div style="display:none;">{{isEdit=false}}</div>
                     <div class="pri_btn_container">
                         <el-button @click="handleListSave(list,0)">保存</el-button>
                         <el-button type="primary" @click="handleListSave(list,1)">提交</el-button>
@@ -42,7 +42,7 @@
                 </div>
             </el-collapse-item>
         </el-collapse>
-        <el-collapse v-model="valueForCollapse">
+        <el-collapse v-model="valueForCollapse" v-if="isEdit">
             <el-collapse-item title="反欺诈调查" name="100" class="lrBorder">
                 <el-row class="mt10">
                     <el-col :span="4" class="pri_label">反欺诈结论：</el-col>
@@ -93,11 +93,13 @@ export default{
             mainOption:"",
             remarks:"",
             valueForCollapse:["100"],
+            isEdit:true
         }
     },
     computed: mapState({
         auditReason: state => state.myTask.fraud_reason,
         msg: state => state.orderInfo.order_msg,
+        antifraudid:state =>state.orderInfo.antifraudid,
         ids(state) {
             let ids = [];
             state.orderInfo.fraudList.forEach((item) => {
@@ -119,10 +121,15 @@ export default{
                 mainOption: this.mainOption,
                 transition: this.fraudConclusion,
                 remarks: this.remarks,
-                id:parseInt(this.antifraudid)
+                id: parseInt(this.antifraudid)
             });
            console.log(this.antifraudid);
-            this.$store.dispatch('saveAntiFraud',params);
+            this.$store.dispatch('saveAntiFraud',params).then(() => { 
+                                                                this.$message({
+                                                                message: this.msg,
+                                                                type: "success"
+                                                                });
+                                                                });
         },
         handleListSave(list,ope) {
             let params = Object.assign({},this.paramAnit, {
@@ -133,10 +140,14 @@ export default{
                 remarks: list.remarks,
                 id:list.id
             });
-            this.$store.dispatch('saveAntiFraud',params);
+            this.$store.dispatch('saveAntiFraud',params).then(() => { 
+                                                                this.$message({
+                                                                message: this.msg,
+                                                                type: "success"
+                                                                });});
         }
     },
-    props: ["paramAnit","fraudList","antifraudid"]
+    props: ["paramAnit","fraudList"]
 }
 </script>
 <style lang="less">

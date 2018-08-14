@@ -298,7 +298,7 @@ export default {
             return Axios.post('/api/antifraudOpnition-api/saveAntifraudOpnition', payload)
                .then((res) => {
                    if(res.data.status == "SUCCESS") {
-                    commit('getantifraudid',{antifraudid:res.data.data});
+                      commit('getantifraudid',{antifraudid:res.data.data});
                         commit('send_msg', {
                             msg: '保存反欺诈结论成功！'
                         })

@@ -78,7 +78,7 @@
 <script>
 import {mapState} from 'vuex'
 export default{
-    props: ['paramPrice','conclusionList','priceid',"orderNum","status"],
+    props: ['paramPrice','conclusionList',"orderNum","status"],
     data() {
         return {
             conclusionOptions: [{
@@ -159,6 +159,7 @@ export default{
     computed:mapState({
         token: state => state.login.user_token,
         msg: state => state.orderInfo.order_msg,
+        priceid:state => state.orderInfo.priceid,   
         priceList: state=> state.orderInfo.conclusionList,
         ids(state) {
             let ids = [];
