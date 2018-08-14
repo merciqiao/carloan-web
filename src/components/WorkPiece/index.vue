@@ -232,7 +232,7 @@ export default {
             actName: "",
             auditState: "",
             bizType: "3000",
-            carInfoId: "",
+            carInfoId: row.bIZINFID,
             creationTime: "",
             currentApprover: "",
             id: 0,
@@ -247,7 +247,7 @@ export default {
         this.$store.commit('addParamsForAudit',{
             auditState:"",
             bizType: "3000",
-            carInfoId:"",
+            carInfoId:row.bIZINFID,
             creationTime:"",
             currentApprover:"",
             currentExaminationPost:"",

@@ -136,7 +136,7 @@ export default {
                 actName: row.cURACTNAME,
                 auditState: "",
                 bizType: row.bIZTYPE,
-                carInfoId: "",
+                carInfoId: row.bIZINFID,
                 creationTime: "",
                 currentApprover: "",
                 id: 0,
@@ -166,7 +166,7 @@ export default {
             this.$store.commit('addParamsForAnit', {
                  approver: "",
                  auditState: "",
-                 carInfoId: "",
+                 carInfoId:  row.bIZINFID,
                  createTime: "",
                  ext1: "",
                  ext2: "",
