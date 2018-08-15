@@ -104,19 +104,19 @@
                     width="100">
                 </el-table-column>
                 <el-table-column
-                    prop="aSSIGNEE"
+                    prop="cUROWNER"
                     label="任务归属人">
                 </el-table-column>
                 <el-table-column
-                    prop="ACTIVITYNAME"
+                    prop="aCTIVITYNAME"
                     label="前当节点">
                 </el-table-column>
-                <el-table-column
-                    prop="cURACTNAME"
+                <el-table-column  :formatter="this.$common.GetBizTypenameBykey" 
+                   prop="bIZTYPE"
                     label="任务类型">
                 </el-table-column>
-                <el-table-column
-                    prop="PROINSTANCESTATE"
+                <el-table-column :formatter="this.$common.GetAuditStatusBykey"
+                    prop="oRDERSTATUS"
                     label="流程状态">
                 </el-table-column>
                 <el-table-column
@@ -124,7 +124,7 @@
                     label="进件门店">
                 </el-table-column>
                 <el-table-column
-                    prop="crMsgdate"
+                    prop="eNTRYDATE"
                     label="门店进件时间">
                 </el-table-column>
                 <el-table-column

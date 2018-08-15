@@ -108,7 +108,7 @@
                     label="任务归属人">
                 </el-table-column>
                 <el-table-column
-                    prop="ACTIVITYNAME"
+                    prop="aCTIVITYNAME"
                     label="前当节点">
                 </el-table-column>
                 <el-table-column

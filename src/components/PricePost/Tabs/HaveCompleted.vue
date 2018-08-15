@@ -80,19 +80,20 @@
                     label="客户姓名"
                     width="100">
                 </el-table-column>
-                <el-table-column
-                    prop="cURACTNAME"
+                <el-table-column  :formatter="this.$common.GetBizTypenameBykey" 
+                   prop="bIZTYPE"
                     label="任务类型">
                 </el-table-column>
+               
                 <el-table-column
                     prop="cURACTNAME"
                     label="产品类型">
                 </el-table-column>
-                <el-table-column
+                 <el-table-column :formatter="this.$common.GetAuditStatusBykey"
                     prop="oRDERSTATUS"
                     label="审批结果">
                 </el-table-column>
-                <el-table-column
+                <el-table-column :formatter="this.$common.GetAuditStatusBykey"
                     prop="oRDERSTATUS"
                     label="案件状态">
                 </el-table-column>

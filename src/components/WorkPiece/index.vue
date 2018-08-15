@@ -13,7 +13,7 @@
               <el-col :span="3"><el-input size="mini" v-model="orderNumber"></el-input></el-col>
               <el-col :span="2"><span>客户姓名：</span></el-col>
               <el-col :span="3"><el-input size="mini" v-model="userName"></el-input></el-col>
-              <el-col :span="2"><span>审批状态：</span></el-col>
+              <el-col :span="2"><span>审批类型：</span></el-col>
               <el-col :span="4">
                   <el-select placeholder="请选择" size="mini" v-model="auditeState">
                       <el-option v-for="item in approvalType" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
@@ -31,7 +31,7 @@
               <el-col :span="3"><el-input size="mini" v-model="idCard"></el-input></el-col>
               <el-col :span="2"><span>手机：</span></el-col>
               <el-col :span="3"><el-input size="mini" v-model="phoneNumber"></el-input></el-col>
-              <el-col :span="2"><span>审批类型：</span></el-col>
+              <el-col :span="2"><span>审批状态：</span></el-col>
               <el-col :span="3">
                   <el-select placeholder="请选择" size="mini" v-model="auditType">
                       <el-option v-for="item in approvalStatus" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
@@ -139,7 +139,7 @@
                     prop="approvalProductType"
                     label="审批产品">
                 </el-table-column>
-                <el-table-column
+                <el-table-column :formatter="this.$common.GetAuditStatusBykey"
                     prop="auditeState"
                     label="审批状态">
                 </el-table-column>

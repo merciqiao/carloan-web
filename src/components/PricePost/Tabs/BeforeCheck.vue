@@ -7,7 +7,7 @@
             <el-col :span="4"><el-input size="mini" v-model="uSERNAME"></el-input></el-col>
             <el-col :span="2"><span>任务类型：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="cURACTNAME">
+                <el-select placeholder="请选择" size="mini" v-model="bIZTYPE">
                     <el-option v-for="item in taskType" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
                 </el-select>
             </el-col>
@@ -76,11 +76,11 @@
                     label="产品类型"
                     width="100">
                 </el-table-column>
-                <el-table-column
-                    prop="cURACTNAME"
+                <el-table-column  :formatter="this.$common.GetBizTypenameBykey" 
+                   prop="bIZTYPE"
                     label="任务类型">
                 </el-table-column>
-                <el-table-column
+                <el-table-column :formatter="this.$common.GetAuditStatusBykey"
                     prop="oRDERSTATUS"
                     label="案件状态">
                 </el-table-column>
@@ -95,7 +95,7 @@
                 <el-table-column
                     prop="eNTRYDATE"
                     label="进件时间">
-                </el-table-column>
+                </el-table-column>               
             </el-table>
             <div class="page_container">
                 <el-pagination
@@ -122,6 +122,7 @@ export default {
             bIZINFNO:'',
             uSERNAME:'',
             cURACTNAME:'',
+            bIZTYPE:'',
             oRDERSTATUS:'',
             cUSTOMERMANAGER:'',
             eNTRYORGID:'',
@@ -190,6 +191,7 @@ export default {
             queryObj.bIZINFNO = this.bIZINFNO;
             queryObj.uSERNAME = this.uSERNAME;
             queryObj.cURACTNAME = this.cURACTNAME;
+            queryObj.bIZTYPE = this.bIZTYPE;
             queryObj.oRDERSTATUS = this.oRDERSTATUS;
             queryObj.cUSTOMERMANAGER = this.cUSTOMERMANAGER;
             queryObj.SECONDLEVELID = this.SECONDLEVELID;
@@ -205,11 +207,12 @@ export default {
             this.bIZINFNO = "";
             this.uSERNAME = "";
             this.cURACTNAME = "";
+            this.bIZTYPE="";
             this.oRDERSTATUS = "";
             this.cUSTOMERMANAGER = "";
             this.SECONDLEVELID = "";
             this.eNTRYORGID = "";
-        }
+        }       
     },
     computed: mapState({
         token: state => state.login.user_token,
