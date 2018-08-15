@@ -55,9 +55,8 @@
     </div>
 </template>
 <script>
-
+import moment from 'moment';
 export default{
-
     data() {
         return {
             currentPage: 1,
@@ -71,9 +70,13 @@ export default{
         handleCurrentChange(val) {
             this.currentPage = val;
         },
-        
-        
-
+        dateFormat:function(row, column) {
+               var date = row[column.property];
+          if (date == undefined) {
+             return "";
+          }
+          return moment(date).format("YYYY-MM-DD HH:mm:ss");
+            }
     },
     props: ['logs']
 }
