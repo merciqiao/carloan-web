@@ -13,7 +13,7 @@
               <el-col :span="3"><el-input size="mini" v-model="orderNumber"></el-input></el-col>
               <el-col :span="2"><span>客户姓名：</span></el-col>
               <el-col :span="3"><el-input size="mini" v-model="userName"></el-input></el-col>
-              <el-col :span="2"><span>审批状态：</span></el-col>
+              <el-col :span="2"><span>审批类型：</span></el-col>
               <el-col :span="4">
                   <el-select placeholder="请选择" size="mini" v-model="auditeState">
                       <el-option v-for="item in approvalType" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
@@ -31,8 +31,8 @@
               <el-col :span="3"><el-input size="mini" v-model="idCard"></el-input></el-col>
               <el-col :span="2"><span>手机：</span></el-col>
               <el-col :span="3"><el-input size="mini" v-model="phoneNumber"></el-input></el-col>
-              <el-col :span="2"><span>审批类型：</span></el-col>
-              <el-col :span="3">
+              <el-col :span="2"><span>审批状态：</span></el-col>
+              <el-col :span="4">
                   <el-select placeholder="请选择" size="mini" v-model="auditType">
                       <el-option v-for="item in approvalStatus" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
                   </el-select>
@@ -40,7 +40,7 @@
               <el-col :span="2"><span>进件日期：</span></el-col>
               <el-col :span="4">
                   <el-date-picker
-                      v-model="entryDate"
+                      v-model="creationTime"
                       type="daterange"
                       range-separator="-"
                       unlink-panels
@@ -58,7 +58,7 @@
                   </el-select>
               </el-col>
               <el-col :span="2"><span>城市：</span></el-col>
-              <el-col :span="5">
+              <el-col :span="3">
                   <el-select placeholder="请选择" size="mini" v-model="secondLevelId">
                       <el-option v-for="item in cityData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                   </el-select>
@@ -139,7 +139,7 @@
                     prop="approvalProductType"
                     label="审批产品">
                 </el-table-column>
-                <el-table-column
+                <el-table-column :formatter="this.$common.GetAuditStatusBykey"
                     prop="auditeState"
                     label="审批状态">
                 </el-table-column>
@@ -168,7 +168,7 @@
                     label="所属门店">
                 </el-table-column>
                 <el-table-column
-                    prop="entryDate"
+                    prop="creationTime"
                     label="进件时间">
                 </el-table-column>
                 <el-table-column
@@ -216,7 +216,7 @@ export default {
         idCard:"",
         phoneNumber:"",
         auditType:"",
-        entryDate:"",
+        creationTime:"",
         entryOrgId:"",
         secondLevelId:"",
         oneStart:"",
@@ -232,7 +232,7 @@ export default {
             actName: "",
             auditState: "",
             bizType: "3000",
-            carInfoId: "",
+            carInfoId: row.bIZINFID,
             creationTime: "",
             currentApprover: "",
             id: 0,
@@ -247,7 +247,7 @@ export default {
         this.$store.commit('addParamsForAudit',{
             auditState:"",
             bizType: "3000",
-            carInfoId:"",
+            carInfoId:row.bIZINFID,
             creationTime:"",
             currentApprover:"",
             currentExaminationPost:"",
@@ -295,14 +295,14 @@ export default {
         queryObj.idCard = this.idCard;
         queryObj.phoneNumber = this.phoneNumber;
         queryObj.auditType = this.auditType;
-        queryObj.entryDateStart = new Date(this.entryDate[0]).toLocaleDateString();
-        queryObj.entryDateEnd = new Date(this.entryDate[1]).toLocaleDateString();
+        queryObj.creationTimeStart =this.creationTime[0]==undefined?"": new Date(this.creationTime[0]).toLocaleDateString();
+        queryObj.creationTimeEnd = this.creationTime[1]==undefined?"":new Date(this.creationTime[1]).toLocaleDateString();
         queryObj.entryOrgId = this.entryOrgId;
         queryObj.secondLevelId = this.secondLevelId;
-        queryObj.oneStartStart = new Date(this.oneStart[0]).toLocaleDateString();
-        queryObj.oneStartEnd = new Date(this.oneStart[1]).toLocaleDateString();
-        queryObj.oneEndStart = new Date(this.oneEnd[0]).toLocaleDateString();
-        queryObj.oneEndEnd = new Date(this.oneEnd[1]).toLocaleDateString();
+        queryObj.oneStartStart = this.oneStart[0]==undefined?"":new Date(this.oneStart[0]).toLocaleDateString();
+        queryObj.oneStartEnd = this.oneStart[1]==undefined?"":new Date(this.oneStart[1]).toLocaleDateString();
+        queryObj.oneEndStart = this.oneEnd[0]==undefined?"":new Date(this.oneEnd[0]).toLocaleDateString();
+        queryObj.oneEndEnd = this.oneEnd[1]==undefined?"":new Date(this.oneEnd[1]).toLocaleDateString();
         this.$store.dispatch('getWorkPiece',queryObj);
     }
   },

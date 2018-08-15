@@ -27,12 +27,14 @@
             <el-table-column
                 prop="createTime"
                 label="开始时间"
-                width="180">
+                width="180"
+                :formatter="this.$common.dateFormat">
             </el-table-column>
             <el-table-column
                 prop="endTime"
                 label="完成时间"
-                width="180">
+                width="180"
+                :formatter="this.$common.dateFormat">
             </el-table-column>
             <el-table-column
                 prop="transition"
@@ -66,7 +68,7 @@ export default{
         },
         handleCurrentChange(val) {
             this.currentPage = val;
-        },
+        }
     },
     props: ['logs']
 }

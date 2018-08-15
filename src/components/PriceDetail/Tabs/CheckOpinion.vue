@@ -295,7 +295,7 @@
                 </el-collapse-item>
             </el-collapse>
             </div>
-            
+
             <!-- <el-collapse v-model="valueForCollapse">
                 <el-collapse-item title="审核结论" name="100">
                     <el-row>
@@ -390,8 +390,6 @@
                     </div>
                 </el-collapse-item>
             </el-collapse>  -->
-        
-                    
         </div>
     </template>
     <script>
@@ -430,7 +428,7 @@
             handleSave(ope) {
                 let params = Object.assign({},this.paramAudit,{
                     operation: ope,
-                    id:this.addID,
+                    id:this.addID[0],
                     transition: this.transition,
                     contractAmount: this.contractAmount,
                     productSeries: this.productSeries,
@@ -442,17 +440,28 @@
                     examineRemarks: this.examineRemarks,                   
                     bizType:this.bizType,
                     currentExaminationPost:this.actName,
-                    orderNumber:this.orderNumber
+                    orderNumber:this.orderNumber,
+                    carInfoId:this.carInfoId,
+                    processId:this.processId
                 });                
                 //保存
                 if(ope=='0')
                 {
-                    this.$store.dispatch('saveAuditConclusion',params).then(() => {                            
-                       this.$message({
-                           message: "保存成功",
-                            type: "success"
-                       });   
-                      this.addID=this.carLoanInfoId;                 
+                    this.$store.dispatch('saveAuditConclusion',params).then(() => {
+                         if(this.msg=='保存审核意见成功！') 
+                         {                             
+                            this.$message({
+                                message: "保存成功",
+                                    type: "success"
+                            });   
+                            this.addID=this.carLoanInfoId;   
+                         }else
+                         {
+                          this.$message({
+                            message: "保存失败",
+                                type: "error"
+                           });    
+                        }                   
                    });
                 
                }
@@ -460,13 +469,25 @@
                 if(ope=='1')
                 {
                     this.$confirm("确认提交吗？", "提示", {}).then(() => {
-                    this.$store.dispatch('saveAuditConclusion',params).then(() => {                            
-                       this.$message({
-                           message: "提交成功",
-                            type: "success"
-                       });
-                        //提交之后跳转
-                       this.$router.push({name:'PricePost'});   
+                    this.$store.dispatch('saveAuditConclusion',params).then(() => {  
+                         if(this.msg=='保存审核意见成功！') 
+                         {                             
+                            this.$message({
+                                message: "提交成功",
+                                    type: "success"
+                            });
+                            this.addID=this.carLoanInfoId;   
+                            //提交之后跳转
+                            this.$router.push({name:'PricePost'}); 
+                        }
+                       else
+                       {
+                            this.$message({
+                                message: "保存失败",
+                                    type: "error"
+                            });    
+                        }      
+                       
                    });
                   });
                }
@@ -487,12 +508,13 @@
                     examineRemarks: list.examineRemarks,
                     bizType:list.bizType,
                     currentExaminationPost:list.actName,
-                    orderNumber:list.orderNumber
+                    orderNumber:list.orderNumber,
+                    carInfoId:list.carInfoId,
+                    processId:list.processId
                 });
                   //保存
                 if(ope=='0')
                 {
-                  
                     this.$store.dispatch('saveAuditConclusion',params).then(() => { 
                         if(this.msg=='保存审核意见成功！') 
                         {                           
@@ -506,8 +528,7 @@
                             message: "保存失败",
                                 type: "error"
                            });    
-                       }
-                                          
+                       }                
                    });
                 
                 }
@@ -515,13 +536,22 @@
                 if(ope=='1')
                 {
                     this.$confirm("确认提交吗？", "提示", {}).then(() => {
-                    this.$store.dispatch('saveAuditConclusion',params).then(() => {                            
-                        this.$message({
-                               message: "提交成功",
-                                type: "success"
-                         });
-                          //提交之后跳转
-                          this.$router.push({name:'PricePost'});   
+                    this.$store.dispatch('saveAuditConclusion',params).then(() => {
+                         if(this.msg=='保存审核意见成功！') 
+                         {                             
+                            this.$message({
+                                message: "提交成功",
+                                    type: "success"
+                            });
+                            //提交之后跳转
+                            this.$router.push({name:'PricePost'}); 
+                        }else
+                         {
+                            this.$message({
+                                message: "保存失败",
+                                type: "error"
+                            });    
+                         }        
                        });
                     });
                 }
@@ -577,7 +607,7 @@
             });    
         },
         //父组件传过来的参数
-        props: ["paramAudit","auditList","actName","bizType","orderNumber"]
+        props: ["paramAudit","auditList","actName","bizType","orderNumber","carInfoId","processId"]
     }
     </script>
     <style lang="less"> 

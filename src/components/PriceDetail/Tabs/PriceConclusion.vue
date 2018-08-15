@@ -78,7 +78,7 @@
 <script>
 import {mapState} from 'vuex'
 export default{
-    props: ['paramPrice','conclusionList','priceid',"orderNum","status"],
+    props: ['paramPrice','conclusionList',"orderNum","status"],
     data() {
         return {
             conclusionOptions: [{
@@ -116,16 +116,20 @@ export default{
                 }else{
                     this.$store.dispatch('savePriceConclusion',params).then(() => { 
                                                                 this.$message({
-                                                                message: "提交成功",
+                                                                message: "保存成功",
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
                 }
             }else{
                 this.$store.dispatch('savePriceConclusion',params).then(() => { 
                                                                 this.$message({
-                                                                message: "提交成功",
+                                                                message: "保存成功",
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
             }
         },
         handleListSave(list,ope) {
@@ -143,22 +147,27 @@ export default{
                 }else{
                     this.$store.dispatch('savePriceConclusion',params).then(() => { 
                                                                 this.$message({
-                                                                message: "提交成功",
+                                                                message: "保存成功",
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
                 }
             }else{
                 this.$store.dispatch('savePriceConclusion',params).then(() => { 
                                                                 this.$message({
-                                                                message: "提交成功",
+                                                                message: "保存成功",
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
             }
         }
     },
     computed:mapState({
         token: state => state.login.user_token,
         msg: state => state.orderInfo.order_msg,
+        priceid:state => state.orderInfo.priceid,   
         priceList: state=> state.orderInfo.conclusionList,
         ids(state) {
             let ids = [];

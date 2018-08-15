@@ -44,7 +44,7 @@
                             <car-info :cars="this.carsInfo"></car-info>
                         </el-tab-pane>
                         <el-tab-pane label="定价结论" v-if="displayTabs.editAuditCarPriceObj">
-                            <price-conclusion :paramPrice="this.paramsForPrice" :conclusionList="this.priceConclusion" :priceid="this.priceid" :orderNum="this.$route.params.order_number" :status="this.$route.params.status"></price-conclusion>
+                            <price-conclusion :paramPrice="this.paramsForPrice" :conclusionList="this.priceConclusion" :orderNum="this.$route.params.order_number" :status="this.$route.params.status"></price-conclusion>
                         </el-tab-pane>
                         <el-tab-pane label="流程轨迹" v-if="displayTabs.logInfoObj">
                             <work-log :logs="this.historyLog"></work-log>
@@ -56,7 +56,7 @@
                             <history-match :carNumMatch="this.carNumberMatch" :carFraMatch="this.carFrameMatch" :idMatch="this.idCardMatch" :phoneMatch="this.phoneMatch"></history-match>
                         </el-tab-pane>
                         <el-tab-pane label="审核意见" v-if="displayTabs.editAuditInfoObj">
-                            <check-opinion :paramAudit="this.paramsForAudit" :auditList="this.auditConclusion" :actName="this.actName" :bizType="this.bizType" :orderNumber="this.orderNum"></check-opinion>
+                           <check-opinion :paramAudit="this.paramsForAudit" :auditList="this.auditConclusion" :actName="this.actName" ></check-opinion>
                         </el-tab-pane>
                         <el-tab-pane label="客户复议" v-if="displayTabs.custorReconsiderObj">
                             <custom-reconsider :orderNum="this.$route.query.order_number"></custom-reconsider>
@@ -68,7 +68,7 @@
                             <final-conclusion :conclusionList="this.priceConclusion"></final-conclusion>
                         </el-tab-pane>
                         <el-tab-pane label="反欺诈" v-if="displayTabs.editAntiFraudObj">
-                            <anti-fraud :paramAnit="this.paramsForAnit" :fraudList="this.fraudConclusion" :antifraudid="this.antifraudid"></anti-fraud>
+                            <anti-fraud :paramAnit="this.paramsForAnit" :fraudList="this.fraudConclusion"></anti-fraud>
                         </el-tab-pane>
                         <el-tab-pane label="反欺诈" v-if="displayTabs.antiFraudObj">
                             <anti-fraudlist :fraudList="this.fraudConclusion"></anti-fraudlist>
@@ -139,10 +139,12 @@ export default {
       clientTop: 0,
       showContextMenu:'none',
       show:false,
+      //processId:this.$route.query.processId,
+      //carInfoId:this.$route.query.carInfoId,
       orderNum:this.$route.query.order_number,
-      status:this.$route.query.status,
-      actName:this.$route.query.actName,
-      bizType:this.$route.query.bizType
+      //status:this.$route.query.status,
+      actName:this.$route.query.actName
+      //bizType:this.$route.query.bizType
     }
   },
   computed:mapState({
@@ -161,8 +163,7 @@ export default {
     auditConclusion: state => state.orderInfo.auditList,
     fraudConclusion: state => state.orderInfo.fraudList,
     historyLog: state => state.orderInfo.historyLogs,
-    priceid:state => state.orderInfo.priceid,
-    antifraudid:state => state.orderInfo.antifraudid,
+    // priceid:state => state.orderInfo.priceid,   
     fileType(state) {
         let fileTypeArr = [];
         state.orderInfo.cars_file.map((item) => {

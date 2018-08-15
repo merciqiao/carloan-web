@@ -145,7 +145,7 @@ export default {
                })
         },
         //保存/提交定价结论
-        savePriceConclusion({commit}, payload) {
+        savePriceConclusion({commit}, payload) {console.log(payload);
             return Axios.post('/api/creditaudit-api/saveLoanPrice', payload)
                .then((res) => {
                    if(res.data.status == "SUCCESS") {
@@ -298,7 +298,7 @@ export default {
             return Axios.post('/api/antifraudOpnition-api/saveAntifraudOpnition', payload)
                .then((res) => {
                    if(res.data.status == "SUCCESS") {
-                    commit('getantifraudid',{antifraudid:res.data.data});
+                      commit('getantifraudid',{antifraudid:res.data.data});
                         commit('send_msg', {
                             msg: '保存反欺诈结论成功！'
                         })
