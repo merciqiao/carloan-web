@@ -28,13 +28,13 @@
                 prop="createTime"
                 label="开始时间"
                 width="180"
-                :formatter="dateFormat">
+                :formatter="this.$common.dateFormat">
             </el-table-column>
             <el-table-column
                 prop="endTime"
                 label="完成时间"
                 width="180"
-                :formatter="dateFormat">
+                :formatter="this.$common.dateFormat">
             </el-table-column>
             <el-table-column
                 prop="transition"
@@ -55,7 +55,6 @@
     </div>
 </template>
 <script>
-import moment from 'moment';
 export default{
     data() {
         return {
@@ -69,14 +68,7 @@ export default{
         },
         handleCurrentChange(val) {
             this.currentPage = val;
-        },
-        dateFormat:function(row, column) {
-               var date = row[column.property];
-          if (date == undefined) {
-             return "";
-          }
-          return moment(date).format("YYYY-MM-DD HH:mm:ss");
-            }
+        }
     },
     props: ['logs']
 }
