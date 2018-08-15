@@ -32,7 +32,7 @@
               <el-col :span="2"><span>手机：</span></el-col>
               <el-col :span="3"><el-input size="mini" v-model="phoneNumber"></el-input></el-col>
               <el-col :span="2"><span>审批状态：</span></el-col>
-              <el-col :span="3">
+              <el-col :span="4">
                   <el-select placeholder="请选择" size="mini" v-model="auditType">
                       <el-option v-for="item in approvalStatus" :key="item.id" :label="item.dictDetailName" :value="item.dictDetailValue"></el-option>
                   </el-select>
@@ -58,7 +58,7 @@
                   </el-select>
               </el-col>
               <el-col :span="2"><span>城市：</span></el-col>
-              <el-col :span="5">
+              <el-col :span="3">
                   <el-select placeholder="请选择" size="mini" v-model="secondLevelId">
                       <el-option v-for="item in cityData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                   </el-select>
