@@ -42,6 +42,11 @@
          
           
 				</el-form-item>
+           <el-form-item label="是否显示" prop="isShow">	
+            <el-select v-model="addForm.isShow" placeholder="请选择" clearable>
+                <el-option  v-for="item in isShowOptions"   :key="item.value"  :label="item.label"  :value="item.value" ></el-option>
+            </el-select>
+				</el-form-item> 
         <!-- <el-form-item label="" prop="parentId">          
 					<el-input v-model="addForm.parentId" auto-complete="off"></el-input>
 				</el-form-item> -->
@@ -95,7 +100,17 @@
           { required: true, message: "请选择资源类型", trigger: "blur" }
         ], 
         parentId: [{ required: true, message: "请输入机构名称", trigger: "blur" }],
-      },        
+      },
+           isShowOptions:[
+             {
+               value:1,
+               label:'是'
+             },
+             {
+                value:0,
+               label:'否'
+             }
+           ]   
     
       };
     },
@@ -171,7 +186,8 @@
                 menuIcon: "",
                 resourceId: "" ,
                 parentId:node.data.id,
-                resourceName:"--请选择--"   
+                resourceName:"--请选择--",
+                isShow:1
         };
       }
        if(param=='2')
@@ -188,6 +204,7 @@
             }).then(
                 function(resultData) {
                 _this.addForm = resultData.data.data; 
+                console.log(JSON.stringify(_this.addForm))
                 if(_this.addForm.resourceName=="" )
                 {
                   _this.addForm.resourceName="--请选择--";
@@ -222,7 +239,8 @@
             const children = parent.data.children || parent.data;
             const index = children.findIndex(d => d.id === data.id);
             children.splice(index, 1);         
-           
+           //重新获取新增后的组织机构数据
+            this.getResult();
           });
         })
         .catch(() => {});

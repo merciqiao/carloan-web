@@ -23,6 +23,21 @@ Vue.use(Viewer, {
 Vue.use(util)
 Vue.config.productionTip = false
 
+ //刷新后加载路由
+var routeParamStr=sessionStorage.getItem('routeParam');
+if(routeParamStr&&routeParamStr!=''){
+  var routeParam=JSON.parse(routeParamStr);
+  store.dispatch('add_Routes',routeParam);
+}
+//刷新后加载菜单
+var menuParamStr=sessionStorage.getItem('menuParam');
+if(menuParamStr&&menuParamStr!=''){
+  var menuParam=JSON.parse(menuParamStr);
+  store.dispatch('add_Menus',menuParam);
+}
+
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -3,7 +3,8 @@ import Axios from "axios";
 export default {
     state: {
         user_token: "",
-        user_msg: ""
+        user_msg: "",
+        sysMenuList:[]
     },
     mutations: {
         user_login(state,payload) {
@@ -11,6 +12,9 @@ export default {
         },
         send_msg(state,payload) {
             state.user_msg = payload.msg
+        },
+        setSysMenuList(state,payload){
+            state.sysMenuList=payload.sysMenuList;
         }
     },
     actions: {
@@ -20,6 +24,9 @@ export default {
                     if(res.data.status == "SUCCESS" && res.data.data !== null) {
                         commit('user_login', {
                             token: res.data.data.userInfo.token
+                        });
+                        commit('setSysMenuList', {
+                            sysMenuList: res.data.data.sysMenuVoList
                         });
                     }else{
                         commit('send_msg', {

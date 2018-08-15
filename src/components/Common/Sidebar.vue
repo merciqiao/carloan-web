@@ -2,7 +2,7 @@
     <div class="sidebar">
         <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="white"
             text-color="#303133" active-text-color="#409eff" unique-opened router>
-            <template v-for="item in items">
+            <template v-for="item in menuList">
                 <template v-if="item.subs">
                     <el-submenu :index="item.index" :key="item.index">
                         <template slot="title">
@@ -25,6 +25,7 @@
 
 <script>
     import bus from '../common/bus';
+    import { mapState } from 'vuex'
     export default {
         data() {
             return {
@@ -100,11 +101,12 @@
                 ]
             }
         },
-        computed:{
+        computed:mapState({
+            menuList: state => state.menu.menuList,
             onRoutes(){
                 return this.$route.path.replace('/','');
             }
-        },
+        }),
         created(){
             // 通过 Event Bus 进行组件间通信，来折叠侧边栏
             bus.$on('collapse', msg => {

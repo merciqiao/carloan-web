@@ -129,7 +129,7 @@
             }).then(
                 function(resultData) {
                 _this.treeData = resultData.data.data;
-                         
+                console.log(JSON.stringify(_this.treeData));
                
                 },
                 function(resultData) {
@@ -157,6 +157,7 @@
                    list.push(item.resoureId);                  
                      });
                      //alert(list);
+                     console.log(JSON.stringify(list))
                       _this.$refs.tree.setCheckedKeys(list);
                
                 },
