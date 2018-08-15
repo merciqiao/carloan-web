@@ -17,7 +17,7 @@
         <el-row class="mt20">
             <el-col :span="2"><span>区域：</span></el-col>
             <el-col :span="4">
-                <el-select placeholder="请选择" size="mini" v-model="SECONDLEVELID" @change="changeRegional">
+                <el-select placeholder="请选择" size="mini" v-model="SECONDLEVELID" @change="changeRegional" >
                     <el-option v-for="item in regionalData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
             </el-col>
@@ -38,7 +38,7 @@
         </el-row>
         <el-row class="mt20">
             <el-col :span="2"><span>门店进件时间：</span></el-col>
-            <el-col :span="5">
+            <el-col :span="7">
                 <el-date-picker
                     v-model="crMsgdate"
                     type="daterange"
@@ -50,7 +50,7 @@
                 </el-date-picker>
             </el-col>
             <el-col :span="2"><span>信审接单时间：</span></el-col>
-            <el-col :span="4">
+            <el-col :span="5">
                 <el-date-picker
                     v-model="eNTRYDATE"
                     type="daterange"

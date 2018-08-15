@@ -116,16 +116,20 @@ export default{
                 }else{
                     this.$store.dispatch('savePriceConclusion',params).then(() => { 
                                                                 this.$message({
-                                                                message: "提交成功",
+                                                                message: "保存成功",
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
                 }
             }else{
                 this.$store.dispatch('savePriceConclusion',params).then(() => { 
                                                                 this.$message({
-                                                                message: "提交成功",
+                                                                message: "保存成功",
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
             }
         },
         handleListSave(list,ope) {
@@ -143,16 +147,20 @@ export default{
                 }else{
                     this.$store.dispatch('savePriceConclusion',params).then(() => { 
                                                                 this.$message({
-                                                                message: "提交成功",
+                                                                message: "保存成功",
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
                 }
             }else{
                 this.$store.dispatch('savePriceConclusion',params).then(() => { 
                                                                 this.$message({
-                                                                message: "提交成功",
+                                                                message: "保存成功",
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
             }
         }
     },

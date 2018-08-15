@@ -129,6 +129,7 @@ export default{
                                                                 message: this.msg,
                                                                 type: "success"
                                                                 });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
                                                                 });
         },
         handleListSave(list,ope) {
@@ -144,7 +145,9 @@ export default{
                                                                 this.$message({
                                                                 message: this.msg,
                                                                 type: "success"
-                                                                });});
+                                                                });
+                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                });
         }
     },
     props: ["paramAnit","fraudList"]
