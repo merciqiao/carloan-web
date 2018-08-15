@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "element-ui": "^2.4.1",
+    "moment": "^2.22.2",
     "qs": "^6.5.2",
     "v-contextmenu": "^2.7.0",
     "v-viewer": "^1.0.1",

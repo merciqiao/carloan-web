@@ -11,6 +11,7 @@ import 'less/base.less'
 import store from './store'
 import axios from 'axios'
 import util from './common/util'
+import moment from "moment"
 Vue.prototype.$ajax=axios
 
 
