@@ -325,7 +325,7 @@ export default {
       isedittag: "false",
       addID: "0",
       isShowAdd: true,
-      saveParamAudit: JSON.parse(sessionStorage.getItem("paramAudit")),
+      saveParamAudit: JSON.parse(sessionStorage.getItem("paramAudit"+this.$route.query.order_number)),
       //保存输入框验证
       saveForm: {
         transition: "",
@@ -475,7 +475,9 @@ export default {
                     });
                     this.addID = this.carLoanInfoId;
                     //提交之后跳转
-                    this.$router.push({ name: "PricePost" });
+                   // this.$router.push({ name: "PricePost" });
+                   window.opener.location.reload();
+                   self.close();
                   } else {
                     this.$message({
                       message: "保存失败",
@@ -498,7 +500,9 @@ export default {
                     });
                     this.addID = this.carLoanInfoId;
                     //提交之后跳转
-                    this.$router.push({ name: "PricePost" });
+                    //this.$router.push({ name: "PricePost" });
+                     window.opener.location.reload();
+                     self.close();
                   } else {
                     this.$message({
                       message: "保存失败",
@@ -600,7 +604,9 @@ export default {
                       type: "success"
                     });
                     //提交之后跳转
-                    this.$router.push({ name: "PricePost" });
+                    //this.$router.push({ name: "PricePost" });
+                     window.opener.location.reload();
+                     self.close();
                   } else {
                     this.$message({
                       message: "保存失败",
@@ -622,7 +628,9 @@ export default {
                       type: "success"
                     });
                     //提交之后跳转
-                    this.$router.push({ name: "PricePost" });
+                   // this.$router.push({ name: "PricePost" });
+                     window.opener.location.reload();
+                     self.close();
                   } else {
                     this.$message({
                       message: "保存失败",
