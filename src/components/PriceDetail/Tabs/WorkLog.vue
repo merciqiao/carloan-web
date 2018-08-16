@@ -37,7 +37,7 @@
                 :formatter="this.$common.dateFormat">
             </el-table-column>
             <el-table-column
-                prop="transition"
+                prop="nextTransition"
                 label="执行备注">
             </el-table-column>
         </el-table>

@@ -102,7 +102,7 @@ export default{
         }
     },
     methods: {
-        handleSave(ope) {          
+        handleSave(ope) {    console.log(this.sessionParamPrice);      
             let params = Object.assign({},this.sessionParamPrice,{
                 operation: ope,
                 pricingConclusion: this.pricingConclusion,
@@ -110,6 +110,10 @@ export default{
                 pricingRemarks: this.pricingRemarks,
                 id:this.priceid
             });
+               if(this.pricingConclusion == "") {
+                    this.$message('定价结论不能为空');
+                    return;
+                } 
             console.log(this.priceid);
             if(this.pricingConclusion !== "同意") {
                 if(this.pricingRemarks == "") {
@@ -120,7 +124,10 @@ export default{
                                                                 message: "保存成功",
                                                                 type: "success"
                                                                 });
-                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                if(ope=="1"){
+                                                                window.opener.location.reload();
+                                                                self.close();
+                                                                }
                                                                 });
                 }
             }else{
@@ -129,7 +136,9 @@ export default{
                                                                 message: "保存成功",
                                                                 type: "success"
                                                                 });
-                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                if(ope=="1"){
+                                                                       window.opener.location.reload();
+                                                                self.close();}
                                                                 });
             }
         },
@@ -142,6 +151,10 @@ export default{
                 pricingMoney: list.pricingMoney,
                 pricingRemarks: list.pricingRemarks
             });
+               if(list.pricingConclusion == "") {
+                    this.$message('定价结论不能为空');
+                    return;
+                } 
             if(params.pricingConclusion !== '同意') {
                 if(params.pricingRemarks == '') {
                     this.$message('备注信息不能为空');
@@ -151,7 +164,9 @@ export default{
                                                                 message: "保存成功",
                                                                 type: "success"
                                                                 });
-                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                if(ope=="1"){
+                                                                       window.opener.location.reload();
+                                                                self.close();}
                                                                 });
                 }
             }else{
@@ -160,7 +175,9 @@ export default{
                                                                 message: "保存成功",
                                                                 type: "success"
                                                                 });
-                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
+                                                                if(ope=="1"){
+                                                                       window.opener.location.reload();
+                                                                self.close();}
                                                                 });
             }
         }
