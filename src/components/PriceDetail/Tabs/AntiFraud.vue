@@ -85,93 +85,98 @@
     </div>
 </template>
 <script>
-import { mapState } from 'vuex';
-export default{
-    data() {
-        return {
-            fraudConclusion:"欺诈",
-            mainOption:"",
-            remarks:"",
-            valueForCollapse:["100"],
-            isEdit:true
-        }
-    },
-    computed: mapState({
-        auditReason: state => state.myTask.fraud_reason,
-        msg: state => state.orderInfo.order_msg,
-        antifraudid:state =>state.orderInfo.antifraudid,
-        ids(state) {
-            let ids = [];
-            state.orderInfo.fraudList.forEach((item) => {
-                ids.push(item.id)
-            });
-            return ids;
-        }
-    }),
-    mounted() {
-        this.$store.dispatch('getFraudReason',{
-            code:"AUDIT_ANTIFRAUD_TYPE"
+import { mapState } from "vuex";
+export default {
+  data() {
+    return {
+      fraudConclusion: "欺诈",
+      mainOption: "",
+      remarks: "",
+      valueForCollapse: ["100"],
+      isEdit: true,
+      sessionParamAnit: JSON.parse(sessionStorage.getItem("paramAudit"+this.$route.query.order_number))
+    };
+  },
+  computed: mapState({
+    auditReason: state => state.myTask.fraud_reason,
+    msg: state => state.orderInfo.order_msg,
+    antifraudid: state => state.orderInfo.antifraudid,
+    ids(state) {
+      let ids = [];
+      state.orderInfo.fraudList.forEach(item => {
+        ids.push(item.id);
+      });
+      return ids;
+    }
+  }),
+  mounted() {
+    this.$store.dispatch("getFraudReason", {
+      code: "AUDIT_ANTIFRAUD_TYPE"
+    });
+  },
+  methods: {
+    handleSave(ope) {
+      let params = Object.assign({}, this.sessionParamAnit, {
+        operation: ope,
+        fraudConclusion: this.fraudConclusion,
+        mainOption: this.mainOption,
+        transition: this.fraudConclusion,
+        remarks: this.remarks,
+        id: parseInt(this.antifraudid)
+      });
+      console.log(this.antifraudid);
+      this.$store.dispatch("saveAntiFraud", params).then(() => {
+        this.$message({
+          message: this.msg,
+          type: "success"
         });
-    },
-    methods: {
-        handleSave(ope) {
-            let params = Object.assign({},this.paramAnit,{
-                operation: ope,
-                fraudConclusion: this.fraudConclusion,
-                mainOption: this.mainOption,
-                transition: this.fraudConclusion,
-                remarks: this.remarks,
-                id: parseInt(this.antifraudid)
-            });
-           console.log(this.antifraudid);
-            this.$store.dispatch('saveAntiFraud',params).then(() => { 
-                                                                this.$message({
-                                                                message: this.msg,
-                                                                type: "success"
-                                                                });
-                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
-                                                                });
-        },
-        handleListSave(list,ope) {
-            let params = Object.assign({},this.paramAnit, {
-                operation: ope,
-                fraudConclusion: list.fraudConclusion,
-                mainOption: list.mainOption,
-                transition: list.fraudConclusion,
-                remarks: list.remarks,
-                id:list.id
-            });
-            this.$store.dispatch('saveAntiFraud',params).then(() => { 
-                                                                this.$message({
-                                                                message: this.msg,
-                                                                type: "success"
-                                                                });
-                                                                if(ope=="1"){this.$router.push({ name: "PricePost" });}
-                                                                });
+        if (ope == "1") {
+          this.$router.push({ name: "PricePost" });
         }
+      });
     },
-    props: ["paramAnit","fraudList"]
-}
+    handleListSave(list, ope) {
+      let params = Object.assign({}, this.sessionParamAnit, {
+        operation: ope,
+        fraudConclusion: list.fraudConclusion,
+        mainOption: list.mainOption,
+        transition: list.fraudConclusion,
+        remarks: list.remarks,
+        id: list.id
+      });
+      this.$store.dispatch("saveAntiFraud", params).then(() => {
+        this.$message({
+          message: this.msg,
+          type: "success"
+        });
+        if (ope == "1") {
+          this.$router.push({ name: "PricePost" });
+        }
+      });
+    }
+  },
+  props: ["paramAnit", "fraudList"]
+};
 </script>
 <style lang="less">
-.pri_label{
-    height: 30px;
-    line-height:30px;
-    text-align: right;
-    border:0;
+.pri_label {
+  height: 30px;
+  line-height: 30px;
+  text-align: right;
+  border: 0;
 }
-.pri_remark{
-    padding-left:0;
-    margin:10px 0 10px 0;
-    border:none;
+.pri_remark {
+  padding-left: 0;
+  margin: 10px 0 10px 0;
+  border: none;
 }
-.pri_mt{
-    margin-top:18px;
+.pri_mt {
+  margin-top: 18px;
 }
-.pri_btn_container{
-    width:170px;
-    float:right;
-    margin-bottom: 20px;
+.pri_btn_container {
+  width: 170px;
+  float: right;
+  margin-bottom: 20px;
 }
 </style>
 

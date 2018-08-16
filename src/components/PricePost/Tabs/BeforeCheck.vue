@@ -112,7 +112,8 @@
     </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+
 export default {
     data() {
         return {
@@ -133,7 +134,22 @@ export default {
         handleClick(row) {          
             this.$common.OpenNewPage(this,'pricedetail',{order_number:row.bIZINFNO, status:1, actName: row.cURACTNAME,bizType: row.bIZTYPE})
             //保存定价结论的参数
-            this.$store.commit('addParamsForPrice',{
+            // this.$store.commit('addParamsForPrice',{
+            //     actName: row.cURACTNAME,
+            //     auditState: "",
+            //     bizType: row.bIZTYPE,
+            //     carInfoId: row.bIZINFID,
+            //     creationTime: "",
+            //     currentApprover: "",
+            //     id: 0,
+            //     orderNumber: row.bIZINFNO,
+            //     pricingProductType: "",
+            //     processId: row.cUREXEID,
+            //     staTus: "",
+            //     transition: "",
+            //     updateTime: ""
+            // });
+            sessionStorage.setItem("paramPrice"+row.bIZINFNO,JSON.stringify( {
                 actName: row.cURACTNAME,
                 auditState: "",
                 bizType: row.bIZTYPE,
@@ -147,9 +163,23 @@ export default {
                 staTus: "",
                 transition: "",
                 updateTime: ""
-            });
+            }));
             //保存审核意见的参数
-            this.$store.commit('addParamsForAudit',{
+            // this.$store.commit('addParamsForAudit',{
+            //     auditState:"",
+            //     bizType: row.bIZTYPE,
+            //     carInfoId:row.bIZINFID,
+            //     creationTime:"",
+            //     currentApprover:"",
+            //     currentExaminationPost:row.cURACTNAME,
+            //     id:0,
+            //     orderNumber: row.bIZINFNO,
+            //     processId: row.cUREXEID,
+            //     productType: row.pRODUCTTYPE,
+            //     staTus:"",
+            //     updateTime:""
+            // });
+             sessionStorage.setItem("paramAudit"+row.bIZINFNO,JSON.stringify( {
                 auditState:"",
                 bizType: row.bIZTYPE,
                 carInfoId:row.bIZINFID,
@@ -162,10 +192,25 @@ export default {
                 productType: row.pRODUCTTYPE,
                 staTus:"",
                 updateTime:""
-            });
+            }));
             //保存反欺诈查询的参数
-            this.$store.commit('addParamsForAnit', {
-                 approver: "",
+            // this.$store.commit('addParamsForAnit', {
+            //      approver: "",
+            //      auditState: "",
+            //      carInfoId:  row.bIZINFID,
+            //      createTime: "",
+            //      ext1: "",
+            //      ext2: "",
+            //      id: 0,
+            //      orderNumber: row.bIZINFNO,
+            //      processId: row.cUREXEID, 
+            //      staTus: "",
+            //      subOption: "",
+            //      updateTime: "",
+            //      validateState: 0
+            // });
+             sessionStorage.setItem("paramAnit"+row.bIZINFNO,JSON.stringify( {
+                    approver: "",
                  auditState: "",
                  carInfoId:  row.bIZINFID,
                  createTime: "",
@@ -178,7 +223,7 @@ export default {
                  subOption: "",
                  updateTime: "",
                  validateState: 0
-            });
+            }));
         },
         handleSizeChange(val) {
             this.pageSize = val;
@@ -245,7 +290,16 @@ export default {
         this.$store.dispatch('getCaseStatus',{
             code:"CD_AUDITE_STATE"
         })
-    }
+    },   
+        created(){
+            // 通过 Event Bus 进行组件间通信，来折叠侧边栏
+            bus.$on('suss', msg => {
+               if(msg=='suss')
+               {
+                   console.log("通信成功");
+               }
+            })
+        }
 }
 </script>
 

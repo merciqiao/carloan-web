@@ -97,12 +97,13 @@ export default{
             valueForCollapse:["100"],
             id:this.priceid,
             isEdit: true,
+            sessionParamPrice: JSON.parse(sessionStorage.getItem("paramPrice"+this.$route.query.order_number))
 
         }
     },
     methods: {
-        handleSave(ope) {
-            let params = Object.assign({},this.paramPrice,{
+        handleSave(ope) {          
+            let params = Object.assign({},this.sessionParamPrice,{
                 operation: ope,
                 pricingConclusion: this.pricingConclusion,
                 pricingMoney: this.pricingMoney,
@@ -134,7 +135,7 @@ export default{
         },
         handleListSave(list,ope) {
             this.isEdit = false;
-            let params = Object.assign({},this.paramPrice,{
+            let params = Object.assign({},this.sessionParamPrice,{
                 operation: ope,
                 id: list.id,
                 pricingConclusion: list.pricingConclusion,
