@@ -13,7 +13,6 @@ const addMenus = {
             var menuList=[];
              _addMenu(menuList,param);
              state.menuList=menuList;
-             console.log(JSON.stringify(menuList));
              //存储到本地存储
              sessionStorage.setItem('menuParam',JSON.stringify(param));
         }

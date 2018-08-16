@@ -131,7 +131,7 @@ export default {
     },
     methods: {
         handleClick(row) {
-            this.$router.push({ name:'PriceDetail', query: {order_number:row.bIZINFNO, status:1, actName: row.cURACTNAME,bizType: row.bIZTYPE}});
+            this.$router.push({ name:'pricedetail', query: {order_number:row.bIZINFNO, status:1, actName: row.cURACTNAME,bizType: row.bIZTYPE}});
             //保存定价结论的参数
             this.$store.commit('addParamsForPrice',{
                 actName: row.cURACTNAME,
