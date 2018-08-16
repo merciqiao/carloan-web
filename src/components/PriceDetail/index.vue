@@ -114,9 +114,9 @@ export default {
     SurveyContacts
   },
   created() {
-      setTimeout(() => {
-        this.chooseType();
-      },3000)
+    //   setTimeout(() => {
+    //     this.chooseType();
+    //   },3000)
   },
   data() {
     return {
@@ -314,7 +314,7 @@ export default {
       this.$store.dispatch('getCarsFile',{
           headers: {'token': this.token},
           params: {order_number: this.$route.query.order_number }
-      }),
+      }).then(()=>this.chooseType()),//加载图片
       //获取定价结论列表
       this.$store.dispatch('getPriceConclusion',{
           headers: {'token': this.token},
@@ -342,6 +342,12 @@ export default {
           statusId: this.$route.query.status
       });
   }
+//   ,
+//   watch:{
+//   	'fileType.length':function(){
+//   		this.chooseType()
+//   	}
+//   }
 }
 </script>
 <style lang="less">
