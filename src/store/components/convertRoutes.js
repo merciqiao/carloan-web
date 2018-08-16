@@ -2,10 +2,10 @@ import {lazy} from './lazyLoading'
 /**
  * 拼接动态路由
  */
-export default (routerList, sysMenuList) => {
-    toRoutes(routerList, sysMenuList)
+export default (routerList,routeHideList, sysMenuList) => {
+    toRoutes(routerList,routeHideList, sysMenuList)
 }
-function toRoutes(routerList, sysMenuList) {
+function toRoutes(routerList,routeHideList, sysMenuList) {
     if (sysMenuList) {
         for (var i = 0; i < sysMenuList.length; i++) {
             var sysMenuNode = sysMenuList[i];
@@ -20,16 +20,21 @@ function toRoutes(routerList, sysMenuList) {
                 };
                  //子节点存在
                 if (sysMenuNode.sysMenuVoChild && sysMenuNode.sysMenuVoChild.length > 0) {
-                    toRoutes(routeNode.children,sysMenuNode.sysMenuVoChild);
+                    toRoutes(routeNode.children,routeHideList,sysMenuNode.sysMenuVoChild);
                 }
                 if(code&&code!=''){
-                    routerList.push(routeNode);
+                    if(sysMenuNode.isShow=='1'){
+                        routerList.push(routeNode);
+                    }
+                    else{
+                        routeHideList.push(routeNode);
+                    }
                 }
             }
             else{
                  //子节点存在
                 if (sysMenuNode.sysMenuVoChild && sysMenuNode.sysMenuVoChild.length > 0) {
-                    toRoutes(routerList,sysMenuNode.sysMenuVoChild);
+                    toRoutes(routerList,routeHideList,sysMenuNode.sysMenuVoChild);
                 }
             }
         }
