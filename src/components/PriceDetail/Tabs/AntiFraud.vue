@@ -131,7 +131,8 @@ export default {
           type: "success"
         });
         if (ope == "1") {
-          this.$router.push({ name: "PricePost" });
+          window.opener.location.reload();
+          self.close();
         }
       });
     },
@@ -150,7 +151,8 @@ export default {
           type: "success"
         });
         if (ope == "1") {
-          this.$router.push({ name: "PricePost" });
+          window.opener.location.reload();
+          self.close();
         }
       });
     }
