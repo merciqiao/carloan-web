@@ -44,6 +44,7 @@
             node-key="id"
             ref="tree"
             highlight-current
+            :check-strictly=true 
             :props="defaultProps">
             </el-tree>
         </div>
@@ -177,6 +178,12 @@
                alert("请选择要添加的角色，单击选择行。");
                }
                var sellist=this.$refs.tree.getCheckedKeys();
+            //    var treeNodes = this.$refs.tree.getCheckedNodes(true);
+            //    for(var i = 0; i < treeNodes.length; i++) {
+            //    if(sellist.indexOf(treeNodes[i].parentId)<0){
+            //     sellist.push(treeNodes[i].parentId);
+            //    }
+            //    }
                var roleid=this.curentroleid;
                if (sellist.length>0) {
                
