@@ -92,7 +92,7 @@ const dynamicRouter = [
         name: 'pricedetail',
         path: '/pricedetail',
         component: resolve => require(['@/components/PriceDetail/index.vue'], resolve),
-        meta: { title: '角色权限管理' }
+        meta: { title: '审核详情页' }
     }
 ]
 export { lazy }

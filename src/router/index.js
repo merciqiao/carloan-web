@@ -19,7 +19,7 @@ const router = new Router({
      {
       path: '*',
       name: '404',
-      component: resolve => require(['@/components/common/404.vue'], resolve)
+      component: resolve => require(['@/components/Common/404.vue'], resolve)
     }
   ],
   mode: 'history'
