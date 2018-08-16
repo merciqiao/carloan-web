@@ -8,6 +8,19 @@ exports.install = function (Vue, options) {
     Common.test = function (){
         alert('执行工具方法test成功');
     };
+    /**
+     * 在新页面打开
+     * @param {*} $this 
+     * @param {*} routeName 
+     * @param {*} query 
+     */
+    Common.OpenNewPage=function($this,routeName,query){
+      let routeData = $this.$router.resolve({
+        name: routeName,
+        query: query,
+      });
+     window.open(routeData.href, '_blank');
+    }
     Common.GetBizTypenameBykey=function(row, column)
     { //alert(row.bIZTYPE);
         var keyName="";
