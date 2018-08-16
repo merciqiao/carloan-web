@@ -169,15 +169,18 @@
                 </el-table-column>
                 <el-table-column
                     prop="creationTime"
-                    label="进件时间">
+                    label="进件时间"
+                     :formatter="this.$common.dateFormat">
                 </el-table-column>
                 <el-table-column
                     prop="oneStart"
-                    label="信审开始时间">
+                    label="信审开始时间"
+                     :formatter="this.$common.dateFormat">
                 </el-table-column>
                 <el-table-column
                     prop="oneEnd"
-                    label="审批结束时间">
+                    label="审批结束时间"
+                     :formatter="this.$common.dateFormat">
                 </el-table-column>
             </el-table>            
             <div class="page_container">

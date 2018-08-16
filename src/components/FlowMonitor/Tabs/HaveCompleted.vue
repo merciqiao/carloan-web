@@ -225,10 +225,10 @@ export default {
             queryObj.SECONDLEVELID = this.SECONDLEVELID;
             queryObj.eNTRYORGID = this.eNTRYORGID;
             queryObj.crMsgdateStr = this.crMsgdateStr;
-            queryObj.eNTRYDATEStr = new Date(this.eNTRYDATE[0]).toLocaleDateString();
-            queryObj.eNTRYDATEEnd = new Date(this.eNTRYDATE[1]).toLocaleDateString();
-            queryObj.eNDDATEStr = new Date(this.eNDDATE[0]).toLocaleDateString();
-            queryObj.eNDDATEEnd = new Date(this.eNDDATE[1]).toLocaleDateString();
+            queryObj.eNTRYDATEStr =  this.eNTRYDATE[0]==undefined?"":new Date(this.eNTRYDATE[0]).toLocaleDateString();
+            queryObj.eNTRYDATEEnd =  this.eNTRYDATE[1]==undefined?"":new Date(this.eNTRYDATE[1]).toLocaleDateString();
+            queryObj.eNDDATEStr =  this.eNDDATE[0]==undefined?"":new Date(this.eNDDATE[0]).toLocaleDateString();
+            queryObj.eNDDATEEnd =  this.eNDDATE[1]==undefined?"":new Date(this.eNDDATE[1]).toLocaleDateString();
             this.$store.dispatch('getCompletedMonitor',queryObj);
         },
         resetQuery() {

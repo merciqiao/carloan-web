@@ -239,10 +239,10 @@ export default {
             queryObj.eNTRYORGID = this.eNTRYORGID;
             queryObj.cURACTNAME = this.cURACTNAME;
             queryObj.ACTIVITYNAME = this.ACTIVITYNAME;
-            queryObj.eNTRYDATEStr = new Date(this.eNTRYDATE[0]).toLocaleDateString();
-            queryObj.eNTRYDATEEnd = new Date(this.eNTRYDATE[1]).toLocaleDateString();
-            queryObj.crMsgdateStr = new Date(this.crMsgdate[0]).toLocaleDateString();
-            queryObj.crMsgdateEnd = new Date(this.crMsgdate[1]).toLocaleDateString();
+            queryObj.eNTRYDATEStr = this.eNTRYDATE[0]==undefined?"":new Date(this.eNTRYDATE[0]).toLocaleDateString();
+            queryObj.eNTRYDATEEnd = this.eNTRYDATE[1]==undefined?"":new Date(this.eNTRYDATE[1]).toLocaleDateString();
+            queryObj.crMsgdateStr = this.crMsgdate[0]==undefined?"":new Date(this.crMsgdate[0]).toLocaleDateString();
+            queryObj.crMsgdateEnd = this.crMsgdate[1]==undefined?"":new Date(this.crMsgdate[1]).toLocaleDateString();
             this.$store.dispatch('getCompletingMonitor',queryObj);
         },
         resetQuery() {
