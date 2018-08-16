@@ -72,7 +72,10 @@
                              <div v-show="false">
                             {{saveEditForm=list}}
                             {{saveRemarkEditForm=list}}
-                             </div>
+                             <div v-if="list.transition=='拒绝'||list.transition=='疑似欺诈'||list.transition=='回退'" >
+                                {{isShowAdd=false}}
+                                </div> 
+                             </div>                             
                              <el-form-item label="审核结论：" prop="transition" >                                  
                                     <el-select v-model="saveEditForm.transition" placeholder="请选择" size="small"  @change="selectAuditing"  @focus="handleFocus(saveEditForm.productType)" >
                                         <el-option value="同意">同意</el-option>

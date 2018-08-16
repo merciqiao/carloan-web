@@ -4,7 +4,8 @@ export default {
     state: {
         user_token: "",
         user_msg: "",
-        sysMenuList:[]
+        sysMenuList:[],
+        sysUserName:""
     },
     mutations: {
         user_login(state,payload) {
@@ -15,6 +16,9 @@ export default {
         },
         setSysMenuList(state,payload){
             state.sysMenuList=payload.sysMenuList;
+        },
+        getSysUserName(state,payload){
+            state.sysUserName=payload.sysUserName;
         }
     },
     actions: {
@@ -27,6 +31,9 @@ export default {
                         });
                         commit('setSysMenuList', {
                             sysMenuList: res.data.data.sysMenuVoList
+                        });                       
+                        commit('getSysUserName', {
+                            sysUserName: res.data.data.userInfo.userName
                         });
                     }else{
                         commit('send_msg', {

@@ -74,7 +74,8 @@ export default {
     computed: mapState({
         msg: state => state.login.user_msg,
         token: state => state.login.user_token,
-        sysMenuList: state => state.login.sysMenuList
+        sysMenuList: state => state.login.sysMenuList,
+        sysUserName: state => state.login.sysUserName
     }),
     methods: {
         login() {
@@ -84,6 +85,9 @@ export default {
             }).then(() => {
                 //用户登录成功之后保存token信息，直到用户退出。
                 localStorage.setItem("token", this.token);
+                 //用户登录成功之后保存sysUserName信息，直到用户退出。
+                 console.log(this.sysUserName);
+                localStorage.setItem("sysUserName", this.sysUserName);
                 this.loginName = "";
                 this.password = "";
                 console.log("菜单"+JSON.stringify(this.sysMenuList));
